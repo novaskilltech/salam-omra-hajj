@@ -370,8 +370,12 @@
         document.getElementById('recapTarifBadge').textContent = `${montant} €`;
         document.getElementById('stripeBtnLabel').textContent = `Régler ${montant} € via Stripe (Lien sécurisé)`;
 
-        if (data.lienPaiementStripe) {
+        if (data.lienPaiementStripe && data.lienPaiementStripe.trim() !== '') {
           document.getElementById('stripeLinkBtn').href = data.lienPaiementStripe;
+          document.getElementById('stripeLinkBtn').style.display = 'flex';
+        } else {
+          document.getElementById('stripeLinkBtn').style.display = 'none';
+          document.getElementById('recapTarifDesc').textContent = "Votre dossier est bien validé. Votre conseiller FAREM Voyage va vous contacter par téléphone ou WhatsApp pour finaliser votre dossier et vous transmettre les modalités de règlement choisies par l'agence.";
         }
 
       } catch (err) {

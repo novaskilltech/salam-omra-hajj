@@ -1649,16 +1649,12 @@
         ? (stripeGlobalConfig?.preferentialPaymentLinkUrl || '')
         : (stripeGlobalConfig?.paymentLinkUrl || '');
 
-      // Prénom du conseiller en charge du dossier
-      let advisorName = "Salah";
+      // Prénom ou nom du conseiller en charge du dossier
+      let advisorName = "Votre conseiller";
       if (p.conseiller) {
         const found = allTeamMembers.find(m => m.identifiant === p.conseiller || m.nom === p.conseiller);
-        if (found && found.prenom) {
-          advisorName = found.prenom;
-        } else if (p.conseiller.includes("Conseiller 1") || p.conseiller.toLowerCase().includes("salah")) {
-          advisorName = "Salah";
-        } else if (p.conseiller.includes("Conseiller 2") || p.conseiller.toLowerCase().includes("youssef")) {
-          advisorName = "Youssef";
+        if (found && (found.prenom || found.nom)) {
+          advisorName = found.prenom || found.nom;
         } else {
           advisorName = p.conseiller.trim().split(/\s+/)[0];
         }
@@ -2294,6 +2290,11 @@ Conseiller Agence — FAREM Voyage (Salam Omra)`;
       const { fullName, advisorName } = getPelerinDetails(p);
       const s = getServiceConfig(serviceKey, p);
 
+      if (!s.url) {
+        alert("Lien Stripe non encore configuré pour ce service dans l'onglet Paramètres. Veuillez d'abord renseigner le lien Stripe de votre agence dans les Paramètres.");
+        return;
+      }
+
       let rawPhone = (p.phone || p.telephone || '').replace(/[^0-9]/g, '');
       if (rawPhone.startsWith('0')) rawPhone = '33' + rawPhone.slice(1);
 
@@ -2315,7 +2316,7 @@ https://salam-omra-hajj.vercel.app
 Dès votre règlement confirmé, nous enclenchons immédiatement cette étape sur votre dossier.
 
 Bien fraternellement,
-${advisorName} — Salam Omra Assistance Hajj`;
+${advisorName} — Agence FAREM Voyage (Salam Omra)`;
 
       trackContact(p.id, 'WHATSAPP', `Proposition ${s.title} (${s.price})`);
       window.open(`https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`, '_blank');
