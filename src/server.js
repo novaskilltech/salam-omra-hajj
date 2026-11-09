@@ -486,7 +486,7 @@ function handleRequest(req, res) {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   const origin = req.headers.origin;
-  const allowedOrigins = ['https://hajj-suivi-nusuk.vercel.app', 'http://localhost:3002', 'http://localhost:3000'];
+  const allowedOrigins = ['https://salam-omra-hajj.vercel.app', 'https://hajj-suivi-nusuk.vercel.app', 'http://localhost:3002', 'http://localhost:3000'];
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -1690,7 +1690,7 @@ function handleRequest(req, res) {
 
   // --- SERVIR FICHIERS STATIQUES (UI) ---
   // Protection contre le Path Traversal
-  if (pathname.includes('..') || pathname.includes('%2e') || pathname.includes('%2E')) {
+  if (/(^|\/)\.\.(\/|$)/.test(pathname) || pathname.includes('%2e') || pathname.includes('%2E')) {
     res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Accès interdit : Path traversal détecté.');
     return;
