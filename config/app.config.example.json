@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Hajj Nusuk Suivi Platform",
+    "version": "0.1.0",
+    "environment": "development"
+  },
+  "security": {
+    "mfaRequired": true,
+    "otpPurgePattern": "\\b[0-9]{4,8}\\b",
+    "allowedNusukSenders": [
+      "noreply@nusuk.sa",
+      "hajj@nusuk.sa"
+    ],
+    "tokenEncryptionKeyRef": "kms://vault/keys/hajj-oauth-tokens"
+  },
+  "connectors": {
+    "gmail": {
+      "enabled": true,
+      "clientId": "GCP_CLIENT_ID_PLACEHOLDER",
+      "pubsubTopic": "projects/salam-omra-hajj/topics/gmail-notifications"
+    },
+    "outlook": {
+      "enabled": true,
+      "clientId": "AZURE_CLIENT_ID_PLACEHOLDER",
+      "graphNotificationEndpoint": "https://api.salamomra.local/api/v1/ingestion/outlook"
+    }
+  },
+  "retention": {
+    "rawEmailMaxRetentionMinutes": 15,
+    "expurgatedEventsRetentionDays": 90,
+    "auditLogsRetentionDays": 365
+  }
+}

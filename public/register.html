@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription Assistance Hajj - Salam Omra</title>
+
+  <!-- Métadonnées SEO & Description Détaillée -->
+  <meta name="description" content="Formulaire officiel d'inscription pour l'assistance personnalisée Hajj sur la plateforme officielle Nusuk. Tarif préférentiel de 350 € pour les anciens clients et 390 € pour les nouveaux pèlerins. Accompagnement expert et partenariat Yusr Al Mashaer.">
+
+  <!-- Favicon & Icônes Navigateur -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.png">
+
+  <!-- Open Graph / Réseaux & Messageries -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://salam-omra-hajj.vercel.app/register">
+  <meta property="og:title" content="Inscription • Assistance Hajj Nusuk 2026 - Salam Omra">
+  <meta property="og:description" content="Créez votre dossier d'assistance Hajj. Vérification et validation de vos pièces sans rejet, attribution d'un conseiller dédié et support pour l'ouverture des ventes Nusuk avec notre provider saoudien Yusr Al Mashaer.">
+  <meta property="og:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <meta property="og:image:secure_url" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Salam Omra Assistance Hajj">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Inscription • Assistance Hajj Nusuk 2026 - Salam Omra">
+  <meta name="twitter:description" content="Rejoignez notre centre d'assistance pour votre inscription Nusuk Hajj. Suivi complet, conseils d'experts et partenariats saoudiens officiels.">
+  <meta name="twitter:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              dark: '#081c24',
+              sidebar: '#0a232f',
+              gold: '#cba052',
+              teal: '#0e7490'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+  <!-- BANDEAU HAUT -->
+  <header class="bg-[#0a232f] text-white border-b border-[#143e50] shadow-md py-4 px-6 sm:px-12 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-amber-300">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2C8 6 6 10 6 15h12c0-5-2-9-6-13z"/>
+          <path d="M4 19h16M7 22h10"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="font-bold text-lg tracking-wide">SALAM OMRA</h1>
+        <p class="text-xs text-amber-300 font-medium">Conciergerie & Assistance Hajj</p>
+      </div>
+    </div>
+
+    <a href="/" class="text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Tableau de bord
+    </a>
+  </header>
+
+  <!-- FORMULAIRE CONTAINER -->
+  <main class="flex-1 max-w-2xl w-full mx-auto p-4 sm:p-8">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 sm:p-10">
+
+      <!-- ETAPE FORMULAIRE -->
+      <div id="formSection">
+        <div class="mb-8">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200 mb-3">
+            Formulaire d'inscription pèlerin
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Rejoindre le centre d'assistance Hajj</h2>
+          <p class="text-sm text-slate-500 mt-2">
+            Remplissez ce formulaire pour créer votre dossier de suivi. Votre demande sera instantanément transmise à un conseiller dédié qui prendra en charge l'accompagnement de votre pèlerinage.
+          </p>
+        </div>
+
+        <!-- MESSAGE D'ERREUR -->
+        <div id="errorAlert" class="hidden mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-3">
+          <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <span id="errorMessage"></span>
+        </div>
+
+        <form id="registrationForm" onsubmit="submitForm(event)" class="space-y-6">
+
+          <!-- 1. IDENTITÉ -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">1. Vos coordonnées personnelles</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Prénom *</label>
+                <input type="text" id="prenom" required placeholder="Ex : Amine"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Nom *</label>
+                <input type="text" id="nom" required placeholder="Ex : Benali"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Email de contact *</label>
+                <input type="email" id="emailContact" required placeholder="pelerin@exemple.com"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Numéro de téléphone portable *</label>
+                <input type="tel" id="telephone" required placeholder="+33 6 12 34 56 78"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ANCIENNETÉ CLIENT -->
+          <div class="pt-4 border-t border-slate-100">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">2. Êtes-vous déjà client chez nous ? *</h3>
+            <p class="text-xs text-slate-500 mb-3">Nous appliquons un tarif préférentiel pour nos anciens clients qui renouvellent leur confiance.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label id="lblNouveau" class="flex items-center gap-3 p-3.5 rounded-xl border-2 border-teal-600 bg-teal-50/50 cursor-pointer transition">
+                <input type="radio" name="dejaClient" value="false" checked onchange="updateTarifDisplay()" class="text-teal-600 focus:ring-teal-500">
+                <div>
+                  <span class="block text-xs font-bold text-slate-900">Nouveau client</span>
+                  <span class="block text-[11px] text-teal-700 font-semibold">Tarif assistance : 390 €</span>
+                </div>
+              </label>
+
+              <label id="lblAncien" class="flex items-center gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="radio" name="dejaClient" value="true" onchange="updateTarifDisplay()" class="text-teal-600 focus:ring-teal-500">
+                <div>
+                  <span class="block text-xs font-bold text-slate-900">Déjà client Salam Omra</span>
+                  <span class="block text-[11px] text-amber-700 font-semibold">Tarif fidélité : 350 €</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. SITUATION NUSUK -->
+          <div class="pt-4 border-t border-slate-100">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">3. Votre situation sur Nusuk Hajj</h3>
+            
+            <div class="space-y-2.5">
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="radio" name="statutNusuk" value="NON_INSCRIT" checked class="text-teal-600 focus:ring-teal-500">
+                <span class="text-xs font-semibold text-slate-700">Je n'ai pas encore créé de compte sur la plateforme Nusuk</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="radio" name="statutNusuk" value="INSCRIT_A_VERIFIER" class="text-teal-600 focus:ring-teal-500">
+                <span class="text-xs font-semibold text-slate-700">J'ai déjà créé mon compte Nusuk (documents en cours de vérification)</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="radio" name="statutNusuk" value="INSCRIT_VALIDE" class="text-teal-600 focus:ring-teal-500">
+                <span class="text-xs font-semibold text-slate-700">Mon compte Nusuk est déjà vérifié et validé par les autorités</span>
+              </label>
+            </div>
+
+            <div class="mt-4">
+              <label class="block text-xs font-bold text-slate-700 mb-1">Adresse email déclarée sur Nusuk (si différente de l'email de contact)</label>
+              <input type="email" id="compteNusukDeclare" placeholder="Laisser vide si identique"
+                     class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+            </div>
+
+            <div class="mt-4">
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nom du groupe familial (facultatif)</label>
+              <input type="text" id="nomFamille" placeholder="Ex : Famille Benali (si inscription groupée)"
+                     class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 bg-slate-50 focus:bg-white transition">
+            </div>
+          </div>
+
+          <!-- 4. CONSENTEMENTS OBLIGATOIRES -->
+          <div class="pt-4 border-t border-slate-100 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">4. Engagements & Protection des données</h3>
+
+            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 space-y-2">
+              <div class="font-bold flex items-center gap-2 text-amber-900">
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Rappel de la prestation Salam Omra
+              </div>
+              <p>
+                L'accompagnement de Salam Omra (Farem Voyage LLC) est facturé <strong id="tarifBoxTxt" class="text-amber-900 font-extrabold">390 € par pèlerin</strong> (tarif de 350 € pour nos anciens clients) pour l'aide administrative, la vérification des pièces, la préparation du portefeuille Nusuk et l'assistance technique lors des ventes. Cette prestation est distincte du prix officiel du voyage et <strong>ne garantit pas l'attribution d'un pack ou d'un visa</strong>, conformément aux règles souveraines du Ministère du Hajj.
+              </p>
+            </div>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="accepteCgv" required class="mt-1 w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500">
+              <span class="text-xs text-slate-600">
+                J'accepte les <strong>Conditions Générales de Vente</strong> relatives aux honoraires d'assistance d'un montant de <span id="tarifCgvTxt" class="font-bold text-slate-900">390 €</span> et reconnais que l'achat final relève exclusivement de la plateforme officielle Nusuk. *
+              </span>
+            </label>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="accepteRgpd" required class="mt-1 w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500">
+              <span class="text-xs text-slate-600">
+                J'accepte le traitement de mes données personnelles par Salam Omra (Farem Voyage LLC) aux fins strictes du suivi de mon inscription et des alertes de calendrier Hajj (Conformité RGPD). *
+              </span>
+            </label>
+          </div>
+
+          <!-- BOUTON VALIDER -->
+          <div class="pt-4">
+            <button type="submit" id="submitBtn"
+                    class="w-full py-3.5 px-6 rounded-2xl bg-[#0a232f] hover:bg-[#123e53] text-white font-bold text-sm shadow-lg shadow-slate-900/10 flex items-center justify-center gap-2 transition">
+              <span>Valider mon inscription</span>
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ECRAN DE CONFIRMATION (APRES SOUMISSION) -->
+      <div id="successSection" class="hidden text-center py-6">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+
+        <h3 class="text-2xl font-extrabold text-slate-900">Inscription enregistrée !</h3>
+        <p class="text-sm text-slate-500 mt-2 max-w-md mx-auto">
+          Votre dossier a été créé avec succès et apparaît immédiatement dans le tableau de bord opérationnel.
+        </p>
+
+        <!-- RECAP REPERES -->
+        <div class="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-left max-w-md mx-auto space-y-3">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500">Référence de dossier :</span>
+            <span id="recapRef" class="font-extrabold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-slate-200"></span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500">Conseiller attribué :</span>
+            <span id="recapConseiller" class="font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200"></span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500">Statut initial :</span>
+            <span class="font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">En cours de contrôle</span>
+          </div>
+        </div>
+
+        <!-- ENCADRÉ PAIEMENT STRIPE -->
+        <div class="mt-8 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-[#0e3b4d] text-white text-left max-w-md mx-auto shadow-md">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs uppercase font-extrabold tracking-wider text-amber-300">Règlement des honoraires</span>
+            <span id="recapTarifBadge" class="text-base font-extrabold text-white">390 €</span>
+          </div>
+          <p id="recapTarifDesc" class="text-xs text-slate-200 mb-4">
+            Vous pouvez régler vos honoraires d'assistance dès maintenant ou attendre que votre conseiller prenne contact avec vous.
+          </p>
+
+          <a id="stripeLinkBtn" href="#" target="_blank"
+             class="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow transition">
+            <span id="stripeBtnLabel">Régler 390 € via Stripe (Lien sécurisé)</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+
+        <!-- BOUTON RETOUR DASHBOARD -->
+        <div class="mt-8">
+          <a href="/" class="inline-flex items-center gap-2 text-xs font-bold text-teal-600 hover:text-teal-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Retourner au tableau de bord
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-4 text-center text-xs text-slate-400">
+    © 2026 Salam Omra Assistance Hajj • Tous droits réservés
+  </footer>
+
+  <script>
+    function updateTarifDisplay() {
+      const isAncien = document.querySelector('input[name="dejaClient"]:checked').value === 'true';
+      const lblNouveau = document.getElementById('lblNouveau');
+      const lblAncien = document.getElementById('lblAncien');
+      const tarifBoxTxt = document.getElementById('tarifBoxTxt');
+      const tarifCgvTxt = document.getElementById('tarifCgvTxt');
+      const recapTarifBadge = document.getElementById('recapTarifBadge');
+      const stripeBtnLabel = document.getElementById('stripeBtnLabel');
+
+      if (isAncien) {
+        lblAncien.className = "flex items-center gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-50/60 cursor-pointer transition";
+        lblNouveau.className = "flex items-center gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:bg-slate-50 cursor-pointer transition";
+        if (tarifBoxTxt) tarifBoxTxt.innerHTML = "350 € par pèlerin (Tarif fidélité ancien client appliqué)";
+        if (tarifCgvTxt) tarifCgvTxt.textContent = "350 € (Tarif fidélité)";
+        if (recapTarifBadge) recapTarifBadge.textContent = "350 €";
+        if (stripeBtnLabel) stripeBtnLabel.textContent = "Régler 350 € via Stripe (Lien sécurisé)";
+      } else {
+        lblNouveau.className = "flex items-center gap-3 p-3.5 rounded-xl border-2 border-teal-600 bg-teal-50/50 cursor-pointer transition";
+        lblAncien.className = "flex items-center gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:bg-slate-50 cursor-pointer transition";
+        if (tarifBoxTxt) tarifBoxTxt.innerHTML = "390 € par pèlerin (Nouveau client)";
+        if (tarifCgvTxt) tarifCgvTxt.textContent = "390 €";
+        if (recapTarifBadge) recapTarifBadge.textContent = "390 €";
+        if (stripeBtnLabel) stripeBtnLabel.textContent = "Régler 390 € via Stripe (Lien sécurisé)";
+      }
+    }
+
+    async function submitForm(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const errorAlert = document.getElementById('errorAlert');
+      const errorMessage = document.getElementById('errorMessage');
+
+      errorAlert.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Enregistrement en cours...</span>';
+
+      const isAncien = document.querySelector('input[name="dejaClient"]:checked').value === 'true';
+
+      const payload = {
+        nom: document.getElementById('nom').value.trim(),
+        prenom: document.getElementById('prenom').value.trim(),
+        emailContact: document.getElementById('emailContact').value.trim(),
+        telephone: document.getElementById('telephone').value.trim(),
+        dejaClient: isAncien,
+        statutNusuk: document.querySelector('input[name="statutNusuk"]:checked').value,
+        compteNusukDeclare: document.getElementById('compteNusukDeclare').value.trim(),
+        nomFamille: document.getElementById('nomFamille').value.trim(),
+        accepteCgv: document.getElementById('accepteCgv').checked,
+        accepteRgpd: document.getElementById('accepteRgpd').checked
+      };
+
+      try {
+        const res = await fetch('/api/v1/pelerins/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Erreur lors de l\'enregistrement.');
+        }
+
+        // Bascule vers l'écran de succès
+        document.getElementById('formSection').classList.add('hidden');
+        document.getElementById('successSection').classList.remove('hidden');
+
+        document.getElementById('recapRef').textContent = data.referenceInterne;
+        document.getElementById('recapConseiller').textContent = data.conseillerAttribue;
+        
+        const montant = data.tarifAssistance || (isAncien ? 350 : 390);
+        document.getElementById('recapTarifBadge').textContent = `${montant} €`;
+        document.getElementById('stripeBtnLabel').textContent = `Régler ${montant} € via Stripe (Lien sécurisé)`;
+
+        if (data.lienPaiementStripe) {
+          document.getElementById('stripeLinkBtn').href = data.lienPaiementStripe;
+        }
+
+      } catch (err) {
+        errorMessage.textContent = err.message;
+        errorAlert.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Valider mon inscription</span> <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+      }
+    }
+
+    // Gestion du retour après paiement Stripe
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('payment') === 'success') {
+        const formSec = document.getElementById('formSection');
+        if (formSec) {
+          const banner = document.createElement('div');
+          banner.className = "mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center gap-3 text-xs";
+          banner.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0">✓</div>
+            <div>
+              <h4 class="font-bold text-sm">Paiement Stripe de 390 € validé avec succès !</h4>
+              <p class="text-emerald-700">Votre règlement a bien été enregistré. Si vous n'aviez pas encore complété ce formulaire, merci de renseigner vos coordonnées ci-dessous pour créer votre dossier.</p>
+            </div>
+          `;
+          formSec.prepend(banner);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

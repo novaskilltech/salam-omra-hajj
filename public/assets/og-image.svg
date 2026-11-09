@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#041015"/>
+      <stop offset="50%" stop-color="#081e28"/>
+      <stop offset="100%" stop-color="#0e3344"/>
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="40%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2b38" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#071720" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Fond Principal -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Cadre Doré Élégant -->
+  <rect x="24" y="24" width="1152" height="582" rx="24" fill="none" stroke="#cba052" stroke-width="2" stroke-opacity="0.4"/>
+  <rect x="34" y="34" width="1132" height="562" rx="16" fill="none" stroke="#cba052" stroke-width="1" stroke-opacity="0.2"/>
+
+  <!-- Motifs géométriques orientaux subtils en filigrane -->
+  <g opacity="0.08" stroke="#cba052" stroke-width="1" fill="none">
+    <circle cx="1020" cy="280" r="260"/>
+    <circle cx="1020" cy="280" r="190"/>
+    <circle cx="1020" cy="280" r="120"/>
+    <polygon points="1020,40 1260,280 1020,520 780,280"/>
+    <polygon points="1020,80 1220,280 1020,480 820,280"/>
+  </g>
+
+  <!-- Emblème / Croissant et Dôme stylisé -->
+  <g transform="translate(930, 160)" filter="url(#glow)">
+    <circle cx="90" cy="90" r="85" fill="#0d2e3d" stroke="#cba052" stroke-width="3" stroke-opacity="0.8"/>
+    <!-- Minaret / Arche -->
+    <path d="M90 25 C65 55 58 85 90 120 C122 85 115 55 90 25 Z" fill="none" stroke="url(#goldGradient)" stroke-width="4.5" stroke-linejoin="round"/>
+    <circle cx="90" cy="62" r="10" fill="url(#goldGradient)"/>
+    <path d="M60 140 L120 140 M72 130 L108 130" stroke="#cba052" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Badge Supérieur -->
+  <g transform="translate(80, 75)">
+    <rect width="410" height="42" rx="21" fill="#0d3140" stroke="#cba052" stroke-width="1.5"/>
+    <circle cx="24" cy="21" r="6" fill="#10b981"/>
+    <text x="42" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#fef08a" letter-spacing="1.5">
+      OMRAYANAIR • CONCIERGERIE &amp; ASSISTANCE HAJJ
+    </text>
+  </g>
+
+  <!-- Titre Principal -->
+  <text x="80" y="195" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#ffffff" letter-spacing="-1">
+    Réussir votre inscription Nusuk
+  </text>
+  <text x="80" y="255" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="url(#goldGradient)" letter-spacing="-1">
+    Sans Stress, Sans Rejet &amp; en Toute Sérénité
+  </text>
+
+  <!-- Description détaillée -->
+  <text x="80" y="315" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="20" font-weight="400" fill="#cbd5e1">
+    Accompagnement expert de A à Z : audit des passeports, validation du compte officiel Nusuk,
+  </text>
+  <text x="80" y="348" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="20" font-weight="400" fill="#cbd5e1">
+    préparation du wallet et assistance prioritaire le jour de la mise en vente des forfaits.
+  </text>
+
+  <!-- Ligne de séparation dorée -->
+  <line x1="80" y1="395" x2="1120" y2="395" stroke="#cba052" stroke-width="1.5" stroke-opacity="0.3"/>
+
+  <!-- 3 Cartes de Réassurance en bas -->
+  <!-- Carte 1 : Provider Saoudien -->
+  <g transform="translate(80, 430)">
+    <rect width="320" height="120" rx="16" fill="url(#cardGradient)" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.6"/>
+    <text x="24" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" fill="#2dd4bf" letter-spacing="1">PROVIDER SAOUDIEN AGRÉÉ</text>
+    <text x="24" y="72" font-family="'Plus Jakarta Sans', sans-serif" font-size="21" font-weight="800" fill="#ffffff">Yusr Al Mashaer</text>
+    <text x="24" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="500" fill="#94a3b8">+ Nouveaux providers dès le 10 nov.</text>
+  </g>
+
+  <!-- Carte 2 : Audit & Zero Blocage -->
+  <g transform="translate(430, 430)">
+    <rect width="320" height="120" rx="16" fill="url(#cardGradient)" stroke="#cba052" stroke-width="1.5" stroke-opacity="0.8"/>
+    <text x="24" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" fill="#fcd34d" letter-spacing="1">SÉCURITÉ &amp; CONFORMITÉ</text>
+    <text x="24" y="72" font-family="'Plus Jakarta Sans', sans-serif" font-size="21" font-weight="800" fill="#ffffff">Zéro Erreur Bloquante</text>
+    <text x="24" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="500" fill="#94a3b8">Audit rigoureux des pièces d'identité</text>
+  </g>
+
+  <!-- Carte 3 : Forfait Transparent -->
+  <g transform="translate(780, 430)">
+    <rect width="340" height="120" rx="16" fill="url(#cardGradient)" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.6"/>
+    <text x="24" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" fill="#7dd3fc" letter-spacing="1">FORFAIT D'ASSISTANCE</text>
+    <text x="24" y="72" font-family="'Plus Jakarta Sans', sans-serif" font-size="21" font-weight="800" fill="#ffffff">350 € / 390 €</text>
+    <text x="24" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="500" fill="#94a3b8">Tarif fidélité 350 € • Nouveau 390 €</text>
+  </g>
+</svg>

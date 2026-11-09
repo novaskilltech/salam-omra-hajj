@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salam Omra • Assistance & Conciergerie Hajj Nusuk 2026</title>
+  <meta name="description" content="Conciergerie et accompagnement expert pour votre inscription officielle Hajj 2026 sur Nusuk. Validation de profil, préparation wallet et veille forfaits par Salam Omra (Farem Voyage LLC).">
+  
+  <!-- Open Graph / WhatsApp Card Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://salam-omra-hajj.vercel.app/">
+  <meta property="og:title" content="Salam Omra • Assistance & Conciergerie Hajj Nusuk 2026">
+  <meta property="og:description" content="Accompagnement expert et vérification officielle de votre dossier Nusuk Hajj par Salam Omra (Farem Voyage LLC). Choisissez la sérénité pour votre pèlerinage.">
+  <meta property="og:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <meta property="og:image:secure_url" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Salam Omra Assistance Hajj">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Salam Omra • Assistance & Conciergerie Hajj Nusuk 2026">
+  <meta name="twitter:description" content="Accompagnement expert et vérification officielle de votre dossier Nusuk Hajj par Salam Omra (Farem Voyage LLC).">
+  <meta name="twitter:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            arabic: ['"Amiri"', 'serif'],
+          },
+          colors: {
+            cream: {
+              50: '#fdfbf7',
+              100: '#f9f6f0',
+              200: '#f4ede1',
+              300: '#ece1cf',
+              400: '#dfcfb7',
+              500: '#cbba9d',
+            },
+            hajj: {
+              gold: '#b88728',
+              goldLight: '#d4a34b',
+              goldDark: '#855b14',
+              emerald: '#0f766e',
+              emeraldDark: '#0d5d57',
+              slate: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfbf8; color: #1e293b; }
+    .gold-gradient {
+      background: linear-gradient(135deg, #b88728 0%, #855b14 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .custom-shadow {
+      box-shadow: 0 20px 40px -15px rgba(184, 135, 40, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-950 text-slate-800 bg-[#fcfbf8]">
+
+  <!-- HEADER NAVIGATION CRÈME ÉLÉGANT -->
+  <header class="sticky top-0 z-50 bg-[#fcfbf8]/95 backdrop-blur-md border-b border-[#eaddc8] px-6 sm:px-12 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="/assets/logo-salam-omra.jpg" alt="Logo Salam Omra" class="w-11 h-11 rounded-full object-cover shadow-sm border border-emerald-300/80">
+      <div>
+        <h1 class="font-extrabold text-base tracking-wider text-slate-900 leading-tight">SALAM OMRA</h1>
+        <p class="text-[11px] text-emerald-800 font-bold tracking-tight">by FAREM VOYAGE LLC • Hajj 2026</p>
+      </div>
+    </div>
+
+    <!-- NAVIGATION DROITE -->
+    <div class="flex items-center gap-3 sm:gap-6 text-xs font-semibold">
+      <a href="#tawaf-vue-du-ciel" class="hidden md:inline-block text-slate-600 hover:text-amber-700 transition">Le Tawaf</a>
+      <a href="#arafat-douas" class="hidden md:inline-block text-slate-600 hover:text-amber-700 transition">Le Mont Arafat</a>
+      <a href="#nusuk-struggle" class="hidden md:inline-block text-slate-600 hover:text-amber-700 transition">Le Défi Nusuk</a>
+      <a href="#tarifs" class="hidden md:inline-block text-slate-600 hover:text-amber-700 transition">Tarifs</a>
+      
+      <!-- LIEN ESPACE CONCIERGERIE (LOGIN) -->
+      <a href="/login" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300/80 shadow-sm transition flex items-center gap-1.5 font-bold">
+        <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        <span>Espace Conciergerie</span>
+      </a>
+
+      <!-- BOUTON REJOINDRE -->
+      <a href="/register" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold shadow-md shadow-amber-900/10 transition">
+        S'inscrire (390 €)
+      </a>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 1. HERO SECTION AVEC FOND CRÈME & SÉRÉNITÉ SPIRITUELLE -->
+  <!-- ======================================================== -->
+  <section class="relative pt-12 pb-20 px-6 sm:px-12 max-w-6xl mx-auto text-center">
+    
+    <!-- Badge doré rassurant -->
+    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-50 border border-amber-300 text-amber-900 mb-6 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
+      Campagne Hajj 2026 • Conciergerie Privée Salam Omra
+    </span>
+
+    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight">
+      Accomplissez le voyage d'une vie avec <span class="gold-gradient">paix d'esprit</span> et sérénité.
+    </h1>
+
+    <p class="mt-5 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
+      Depuis la numérisation obligatoire imposée par l'Arabie Saoudite, l'inscription au Hajj s'effectue exclusivement en ligne sur la plateforme <strong class="text-slate-900">Nusuk</strong>. Ne laissez aucun bug technique ou compte à rebours vous priver du pèlerinage.
+    </p>
+
+    <!-- DOUBLE PORTAIL (ORIENTATION DIRECTE) -->
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto text-left">
+      
+      <!-- CÔTÉ PÈLERIN -->
+      <div class="p-6 rounded-3xl bg-white border border-[#e8dfd1] hover:border-teal-600/50 shadow-lg hover:shadow-xl transition relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-teal-800">Futurs Pèlerins</span>
+          <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-300/60">Forfait 390 €</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 mt-2">Vous préparez votre Hajj 2026</h3>
+        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+          Nous vérifions vos passeports, paramétrons votre e-Wallet officiel, arbitrons vos formules avec les providers agréés et veillons lors des ouvertures de ventes.
+        </p>
+        <div class="mt-5">
+          <a href="/register" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs shadow transition">
+            <span>Remplir le formulaire d'inscription</span>
+            <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- CÔTÉ CONCIERGERIE -->
+      <div class="p-6 rounded-3xl bg-[#f8f5ee] border border-[#e2d5c1] hover:border-slate-400 shadow-lg hover:shadow-xl transition relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900">Équipe & Conseillers</span>
+          <span class="text-xs font-semibold text-slate-500">Accès Restreint</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 mt-2">Accès Conciergerie</h3>
+        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+          Espace de pilotage pour l'équipe Salam Omra : gestion des 76+ pèlerins, flux des messages officiels Nusuk, import JSON/CSV et planification des RDV.
+        </p>
+        <div class="mt-5">
+          <a href="/login" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow transition">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>Connexion Conciergerie</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 2. PHOTO SPECTACULAIRE : VUE DU CIEL DE LA MOSQUÉE SACRÉE & TAWAF -->
+  <!-- ======================================================== -->
+  <section id="tawaf-vue-du-ciel" class="py-14 px-6 sm:px-12 bg-[#f4ede1]/60 border-t border-b border-[#e8ded0]">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-8">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-amber-800 bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-300">
+          La Maison Sacrée de Dieu
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-sans">
+          La Kaaba & le Tawaf vu du ciel
+        </h2>
+        <p class="text-sm text-slate-600 mt-2 max-w-2xl mx-auto">
+          Des millions de cœurs tournés vers un même point cardinal. La beauté absolue de la circumambulation dans l'enceinte sacrée de Masjid al-Haram.
+        </p>
+      </div>
+
+      <!-- BANNIÈRE PHOTO RÉELLE HAUTE RÉSOLUTION DU TAWAF VU DU CIEL -->
+      <div class="rounded-3xl overflow-hidden border-2 border-[#dfd2be] shadow-2xl relative group bg-white">
+        <img src="/assets/kaaba-aerial-tawaf.jpg" 
+             alt="Vue aérienne de la Mosquée Sacrée de La Mecque avec les pèlerins en circumambulation Tawaf autour de la Kaaba" 
+             class="w-full h-80 sm:h-[450px] object-cover object-center group-hover:scale-102 transition duration-700">
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 text-left">
+          <span class="text-xs font-extrabold uppercase tracking-widest text-amber-300">Masjid Al-Haram • Makkah Al-Mukarramah</span>
+          <h3 class="text-xl sm:text-2xl font-bold text-white mt-1">« Et appelle les gens au Pèlerinage ; ils viendront à toi à pied et sur tout monture... »</h3>
+          <p class="text-xs sm:text-sm text-slate-200 mt-1 max-w-2xl">
+            Sourate Al-Hajj (v. 27) — Chaque tour de Tawaf est un pas vers l'éternité. Notre rôle est de sécuriser votre parcours technique pour que votre cœur ne soit habité que par la foi.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRILLE DEUX VUES DÉTAILLÉES : TAWAF & FOULE EN BLANC -->
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+        <div class="p-5 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm flex items-start gap-4">
+          <img src="/assets/tawaf-crowd-close.jpg" alt="Pèlerins réunis en prière autour de la Kaaba" class="w-24 h-24 rounded-xl object-cover shrink-0 border border-slate-200">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">Fraternité universelle</span>
+            <h4 class="font-bold text-slate-900 text-sm mt-0.5">La marée blanche du Tawaf</h4>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Tous égaux vêtus d'Ihram, riches et pauvres, sans distinction. Vivre ce moment sans angoisse administrative est le plus beau cadeau à s'offrir.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm flex items-start gap-4">
+          <div class="w-24 h-24 rounded-xl bg-amber-50 border border-amber-200 flex flex-col items-center justify-center text-center p-2 shrink-0">
+            <span class="font-arabic text-xl font-bold text-amber-900">لَبَّيْكَ</span>
+            <span class="text-[10px] font-bold text-slate-700 mt-1">Labbayk Allahoumma</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800">Accompagnement Spirituel</span>
+            <h4 class="font-bold text-slate-900 text-sm mt-0.5">Votre dévotion, notre priorité</h4>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Nous prenons en charge la complexité technique et les aléas de Nusuk. Vous vous préparez spirituellement pour répondre à l'appel.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 3. SECTION SPÉCIALE : LE MONT ARAFAT & LES DOUAS -->
+  <!-- ======================================================== -->
+  <section id="arafat-douas" class="py-16 px-6 sm:px-12 bg-[#fcfbf8]">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-10">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-teal-800 bg-teal-50 px-3.5 py-1 rounded-full border border-teal-200">
+          Le Jour d'Arafat • 9 Dhul-Hijjah
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-sans">
+          Le Mont Arafat : Le Sommet Spirituel du Hajj
+        </h2>
+        <p class="text-sm text-slate-600 mt-2 max-w-2xl mx-auto">
+          « Le Hajj, c'est Arafat » (Prophète Muhammad ﷺ). C'est le jour du pardon infini et des invocations (Douas) qui transforment une existence.
+        </p>
+      </div>
+
+      <!-- DEUX PHOTOS RÉELLES DU MONT ARAFAT & DES DOUAS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-left">
+        
+        <!-- CARTE 1 : LES DOUAS AU MONT ARAFAT -->
+        <div class="rounded-3xl overflow-hidden border border-[#e6dcce] bg-white shadow-xl group">
+          <div class="h-64 sm:h-72 overflow-hidden relative">
+            <img src="/assets/arafat-pilgrims-dua.jpg" 
+                 alt="Pèlerins en prière et invocations douas sur le Mont Arafat lors du Hajj" 
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700">
+            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-slate-800 border border-slate-200">
+              🤲 Invocations & Larmes de repentir
+            </div>
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">Le moment décisif</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1">Les mains tendues vers le Tout-Miséricordieux</h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Sur la plaine d'Arafat, du zénith au coucher du soleil, les pèlerins déversent leur cœur en prières. C'est l'instant où toutes les fautes passées sont effacées pour celui dont le pèlerinage est agréé.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+              <span>Station sacrée (Wuquf)</span>
+              <span class="text-teal-700 font-bold">Pilier indispensable</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARTE 2 : JABAL AL-RAHMAH (LA MONTAGNE DE LA MISÉRICORDE) -->
+        <div class="rounded-3xl overflow-hidden border border-[#e6dcce] bg-white shadow-xl group">
+          <div class="h-64 sm:h-72 overflow-hidden relative">
+            <img src="/assets/arafat-jabal-rahmah.jpg" 
+                 alt="Jabal al-Rahmah au Mont Arafat couvert de pèlerins vêtus d'Ihram" 
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
+            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-slate-800 border border-slate-200">
+              ⛰️ Jabal al-Rahmah
+            </div>
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800">La Montagne de la Miséricorde</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1">Une colline baignée d'espérance</h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Des milliers de pèlerins convergent vers la stèle blanche de Jabal al-Rahmah. À cet instant sacré, chaque seconde compte. Personne ne devrait avoir l'esprit pollué par des inquiétudes de réservation ou d'hôtel mal attribué.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+              <span>Plaine d'Arafat</span>
+              <span class="text-amber-800 font-bold">Journée de pardon</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 4. SECTION DÉFI NUSUK : ANALYSE DU PIÈGE TECHNIQUE -->
+  <!-- ======================================================== -->
+  <section id="nusuk-struggle" class="py-16 px-6 sm:px-12 bg-[#f4ede1]/50 border-t border-b border-[#e5d9c7]">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-10">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-rose-700 bg-rose-50 px-3.5 py-1 rounded-full border border-rose-200">
+          La réalité de la plateforme saoudienne
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-sans">
+          Pourquoi 68% des pèlerins isolés échouent sur Nusuk ?
+        </h2>
+        <p class="text-sm text-slate-600 mt-2 max-w-2xl mx-auto">
+          Voici à quoi ressemble l'écran d'un pèlerin qui tente de s'inscrire seul sur le portail officiel saoudien sans préparation technique :
+        </p>
+      </div>
+
+      <!-- INTERFACE NUSUK AVEC LOGO OFFICIEL & CAPTURE RÉELLE DU PROBLÈME -->
+      <div class="rounded-3xl border border-[#dfd2be] bg-white shadow-xl overflow-hidden max-w-4xl mx-auto">
+        
+        <!-- Header de la plateforme Nusuk avec le logo officiel fourni -->
+        <div class="bg-[#fcfaf5] border-b border-[#ebdcc7] px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <!-- Logo Officiel Nusuk Hajj -->
+            <img src="/assets/nusuk-hajj-logo.png" alt="Logo Officiel Nusuk Hajj" class="h-10 object-contain bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-sm">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-sm text-slate-900 tracking-wide">PORTAIL OFFICIEL NUSUK HAJJ</span>
+                <span class="text-[10px] text-amber-800 font-bold bg-amber-100 px-2 py-0.5 rounded border border-amber-300">MINISTRY OF HAJJ</span>
+              </div>
+              <p class="text-[10px] text-slate-500">Royaume d'Arabie Saoudite • Plateforme unique de réservation</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 text-xs">
+            <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 font-bold text-[11px] border border-rose-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span> BLOCAGE TECHNIQUE FRÉQUENT
+            </span>
+          </div>
+        </div>
+
+        <!-- Corps : Capture Réelle + Analyse des Erreurs -->
+        <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center text-left text-xs">
+          
+          <!-- Colonne GAUCHE (5 cols) : La Capture d'Écran Réelle fournie par l'utilisateur -->
+          <div class="md:col-span-5 flex flex-col items-center">
+            <div class="relative rounded-2xl overflow-hidden border-2 border-rose-300 shadow-lg bg-black max-w-[260px] group">
+              <img src="/assets/nusuk-error-screenshot.png" 
+                   alt="Erreur réelle rencontrée par un pèlerin sur la plateforme Nusuk Hajj" 
+                   class="w-full h-auto object-contain">
+              <div class="absolute inset-0 bg-rose-900/10 pointer-events-none"></div>
+            </div>
+            <span class="text-[10px] text-slate-400 mt-2 italic text-center">Capture authentique de l'application Nusuk</span>
+          </div>
+
+          <!-- Colonne DROITE (7 cols) : Explications des causes de blocage -->
+          <div class="md:col-span-7 space-y-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Le piège du compte à rebours et des rejets de passeport</h3>
+              <p class="text-slate-600 mt-1 leading-relaxed text-xs">
+                Sur la capture ci-contre, vous observez les deux écueils majeurs qui font perdre leur place à des milliers de familles chaque année :
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3 rounded-xl bg-rose-50/60 border border-rose-200">
+                <div class="font-bold text-rose-900 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  <span>1. « Something Went Wrong : Invalid passport number... »</span>
+                </div>
+                <p class="text-slate-700 mt-1">
+                  Les lecteurs OCR saoudiens rejettent les scans si le contraste, la bande MRZ ou l'orthographe exacte diffèrent ne serait-ce que d'une lettre.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200">
+                <div class="font-bold text-amber-900 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>2. Le compte à rebours SMS / OTP (83 secondes)</span>
+                </div>
+                <p class="text-slate-700 mt-1">
+                  Les SMS de validation envoyés depuis Riyad subissent de fréquents retards sur les opérateurs télécoms européens. Si le code expire, la session est perdue et le pack convoité s'envole.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-teal-50 border border-teal-200">
+                <div class="font-bold text-teal-900 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>La solution Salam Omra : Anticipation & Audit technique</span>
+                </div>
+                <p class="text-slate-700 mt-1">
+                  Nous validons vos pièces bien avant l'ouverture, calibrons votre e-Wallet en amont et surveillons l'ouverture des ventes pour agir dans les toutes premières secondes.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 5. NOTRE MISSION : ACCOMPAGNEMENT DE A À Z -->
+  <!-- ======================================================== -->
+  <section id="accompagnement" class="py-16 px-6 sm:px-12 bg-[#fcfbf8]">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-amber-800 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-300">
+          Méthode Éprouvée
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-sans">
+          Les 4 piliers de notre accompagnement
+        </h2>
+        <p class="text-sm text-slate-600 mt-2 max-w-2xl mx-auto">
+          Une équipe dédiée pour vous guider pas à pas jusqu'à la confirmation de votre visa officiel.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
+        
+        <div class="p-6 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-100/70 text-amber-800 font-extrabold flex items-center justify-center text-sm mb-4">
+            01
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Audit des Passeports</h4>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Contrôle rigoureux de la validité (min. 6 mois), de la bande MRZ et des photos d'identité aux normes exactes du Ministère du Hajj.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-100/70 text-amber-800 font-extrabold flex items-center justify-center text-sm mb-4">
+            02
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Préparation e-Wallet</h4>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Conseil sur le rechargement en Riyal Saoudien (SAR) par virement bancaire pour éviter les blocages de plafonds CB lors des paiements de 10 000 €+.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-100/70 text-amber-800 font-extrabold flex items-center justify-center text-sm mb-4">
+            03
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Arbitrage des Forfaits</h4>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Sélection préalable de vos 3 choix de formules prioritaires avec notre partenaire de référence Yusr Al Mashaer et les providers agréés.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white border border-[#e8dfd1] shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-100/70 text-amber-800 font-extrabold flex items-center justify-center text-sm mb-4">
+            04
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Veille & Alertes Live</h4>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Surveillance 24/7 des fenêtres d'ouverture officielles par nos conseillers (Riyad/Paris) pour vous alerter instantanément par WhatsApp.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 6. TARIFS CLAIRS & TRANSPARENTS (390 €) -->
+  <!-- ======================================================== -->
+  <section id="tarifs" class="py-16 px-6 sm:px-12 bg-[#f4ede1]/50 border-t border-b border-[#e5d9c7]">
+    <div class="max-w-4xl mx-auto text-center">
+      
+      <span class="text-xs font-extrabold uppercase tracking-widest text-amber-800 bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-300">
+        Tarification Transparente
+      </span>
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-sans">
+        Un investissement mesuré pour la sérénité du Hajj
+      </h2>
+      <p class="text-sm text-slate-600 mt-2 max-w-xl mx-auto">
+        Face à un voyage représentant entre 8 000 € et 14 000 €, nos honoraires d'assistance garantissent la rigueur technique de votre candidature.
+      </p>
+
+      <div class="mt-10 max-w-lg mx-auto bg-white rounded-3xl border-2 border-amber-400 shadow-xl p-8 text-left relative">
+        <div class="absolute -top-3.5 right-6 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow">
+          FORFAIT OFFICIEL 2026
+        </div>
+
+        <div class="flex items-baseline justify-between border-b border-slate-100 pb-5">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">Forfait Assistance Complète</h3>
+            <p class="text-xs text-slate-500">Par pèlerin majeur ou mineur</p>
+          </div>
+          <div class="text-right">
+            <span class="text-3xl font-extrabold text-slate-900">390 €</span>
+            <span class="text-xs text-slate-400 block font-normal">TTC / dossier</span>
+          </div>
+        </div>
+
+        <!-- MENTION TARIF PRÉFÉRENTIEL ANCIENS CLIENTS -->
+        <div class="mt-4 p-3 rounded-xl bg-purple-50 border border-purple-200 text-xs text-purple-900 flex items-center justify-between">
+          <span class="font-bold">✨ Ancien pèlerin Salam Omra ?</span>
+          <span class="bg-purple-200/80 px-2.5 py-0.5 rounded-full font-extrabold text-[11px]">Tarif Fidélité 350 €</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-xs text-slate-700">
+          <li class="flex items-center gap-2.5">
+            <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Audit et conformité des passeports & photos</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Assistance au paramétrage du e-Wallet et virements</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Conseiller dédié joignable par WhatsApp & téléphone</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Veille active horaire lors des ouvertures de ventes Nusuk</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Paiement sécurisé par Stripe (CB, Apple Pay, Google Pay)</span>
+          </li>
+        </ul>
+
+        <div class="mt-8">
+          <a href="/register" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-xs shadow-md transition">
+            <span>Commencer mon inscription en ligne</span>
+            <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+
+        <p class="mt-4 text-[11px] text-slate-500 text-center">
+          * Les honoraires d'assistance sont distincts du coût du forfait officiel fixé par le Ministère du Hajj saoudien.
+        </p>
+      </div>
+
+      <!-- FORMULES À LA CARTE (PAR ÉTAPE) -->
+      <div class="mt-10">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ou choisissez nos services à la carte selon votre étape</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">Étape 1</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-2">Profil & Vérification</h4>
+              <p class="text-xs text-slate-500 mt-1">Audit conformité passeport, photo et suivi jusqu'à la pastille verte officielle.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900">90 €</span>
+              <a href="/register" class="text-xs font-bold text-teal-700 hover:underline">Démarrer →</a>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">Étape 2</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-2">Recharge E-Wallet</h4>
+              <p class="text-xs text-slate-500 mt-1">Déblocage plafonds bancaires et sécurisation du virement en Riyals (SAR).</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900">140 €</span>
+              <a href="/register" class="text-xs font-bold text-teal-700 hover:underline">Démarrer →</a>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">Étape 3</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-2">Sprint Réservation</h4>
+              <p class="text-xs text-slate-500 mt-1">Veille forfaits Yusr Al Mashaer et assistance d'urgence lors de l'ouverture des ventes.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900">240 €</span>
+              <a href="/register" class="text-xs font-bold text-teal-700 hover:underline">Démarrer →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- FOOTER ÉLÉGANT -->
+  <!-- ======================================================== -->
+  <footer class="py-10 px-6 sm:px-12 bg-white border-t border-[#e8dfd1] text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <span class="font-extrabold text-slate-900 tracking-wider">SALAM OMRA</span>
+        <p class="text-[11px] text-slate-400 mt-0.5">Conciergerie Privée d'Assistance Hajj • Campagne Nusuk 2026</p>
+      </div>
+
+      <div class="flex items-center gap-6 text-[11px] font-semibold text-slate-600">
+        <a href="/login" class="hover:text-amber-800 transition">Espace Conciergerie</a>
+        <a href="/register" class="hover:text-amber-800 transition">Formulaire Pèlerins</a>
+        <a href="javascript:void(0)" onclick="openLegalModal()" class="hover:text-amber-800 transition cursor-pointer">Mentions Légales & CGV</a>
+      </div>
+
+      <p class="text-[11px] text-slate-400">
+        © 2026 Salam Omra by FAREM VOYAGE LLC • Tous droits réservés.
+      </p>
+    </div>
+  </footer>
+
+  <!-- MODAL MENTIONS LÉGALES & CGV -->
+  <div id="legalModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-[#e5d9c7] shadow-2xl relative max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <h3 class="text-base font-extrabold text-slate-900">Mentions Légales & Conditions Générales</h3>
+        <button onclick="closeLegalModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+      <div class="mt-4 space-y-4 text-xs text-slate-600 leading-relaxed">
+        <div>
+          <h4 class="font-bold text-slate-800">1. Présentation de la conciergerie</h4>
+          <p>Le service Salam Omra est une prestation d'assistance administrative, technique et de conciergerie privée pour l'accompagnement des pèlerins dans la constitution de leur dossier sur la plateforme officielle saoudienne Nusuk Hajj.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800">2. Avertissement & Indépendance</h4>
+          <p>Salam Omra (Farem Voyage LLC) agit en qualité de prestataire de conseil indépendant. La plateforme officielle <em>Nusuk Hajj</em> relève de la compétence exclusive du Ministère du Hajj et de la Omra d'Arabie Saoudite. Les forfaits de pèlerinage sont contractés directement auprès des agences saoudiennes agréées via le portail Nusuk.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800">3. Tarification & Rétractation</h4>
+          <p>Le forfait d'assistance personnalisé s'élève à 390 € TTC par dossier (350 € pour les anciens clients). Le paiement en ligne s'effectue via l'infrastructure sécurisée Stripe (CB, Apple Pay, Google Pay). Conformément aux règles applicables aux prestations de services personnalisées, l'exécution commence dès validation du dossier.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800">4. Protection des Données (RGPD)</h4>
+          <p>Les données collectées (nom, téléphone, passeport, coordonnées) sont strictement réservées à la finalité d'assistance au pèlerinage et ne font l'objet d'aucune cession commerciale. Droit d'accès et d'effacement : faremvoyage@outlook.fr.</p>
+        </div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-slate-100 text-right">
+        <button onclick="closeLegalModal()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openLegalModal() {
+      document.getElementById('legalModal').classList.remove('hidden');
+    }
+    function closeLegalModal() {
+      document.getElementById('legalModal').classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

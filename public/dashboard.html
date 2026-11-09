@@ -1,0 +1,3068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salam Omra - Assistance Hajj | Tableau de bord</title>
+
+  <!-- Favicon & Icônes Navigateur -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://salam-omra-hajj.vercel.app/dashboard">
+  <meta property="og:title" content="Tableau de bord • Salam Omra Assistance Hajj">
+  <meta property="og:description" content="Plateforme de conciergerie et de suivi opérationnel des inscriptions Nusuk Hajj 2026.">
+  <meta property="og:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <meta property="og:image:secure_url" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Salam Omra Assistance Hajj">
+  <meta name="twitter:description" content="Tableau de bord de suivi et conciergerie Hajj Nusuk.">
+  <meta name="twitter:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              dark: '#081c24',
+              sidebar: '#0a232f',
+              gold: '#cba052',
+              teal: '#0e7490',
+              accent: '#0f766e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
+    
+    /* Optimisation Windows Chromium */
+    html {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Barres de défilement Chromium & Windows */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+    .custom-scroll {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #94a3b8 #e2e8f0;
+    }
+
+    /* Transition fluide sidebar */
+    #mainSidebar {
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* État replié sur desktop */
+    @media (min-width: 768px) {
+      .sidebar-collapsed {
+        width: 74px !important;
+      }
+      .sidebar-collapsed .sidebar-header-text,
+      .sidebar-collapsed .nav-text,
+      .sidebar-collapsed .nav-badge,
+      .sidebar-collapsed .sidebar-footer-text {
+        display: none !important;
+      }
+      .sidebar-collapsed .nav-btn {
+        justify-content: center !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+      }
+      .sidebar-collapsed .p-4.border-t,
+      .sidebar-collapsed .p-3.border-t {
+        padding: 0.75rem 0.25rem !important;
+      }
+      .sidebar-collapsed #desktopFoldIcon {
+        transform: rotate(180deg);
+      }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased flex h-screen overflow-hidden">
+
+  <!-- MODAL DE CONNEXION OBLIGATOIRE SI NON AUTHENTIFIÉ -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-[#06161d]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-[#0a232f] border border-slate-700 rounded-3xl p-8 shadow-2xl text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-400/10 border border-amber-300/30 flex items-center justify-center text-amber-300 mx-auto mb-3">
+        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2C8 6 6 10 6 15h12c0-5-2-9-6-13z"/>
+          <path d="M4 19h16M7 22h10"/>
+        </svg>
+      </div>
+      <h2 class="text-xl font-bold text-white">Espace Conciergerie Sécurisé</h2>
+      <p class="text-xs text-slate-400 mt-1 mb-6">Veuillez renseigner votre mot de passe d'accès pour consulter et gérer les dossiers pèlerins.</p>
+
+      <div id="authError" class="hidden mb-4 p-3 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-semibold">
+        Mot de passe incorrect
+      </div>
+
+      <form onsubmit="unlockDashboard(event)" class="space-y-4">
+        <input type="password" id="gatePassword" required placeholder="Mot de passe conciergerie..."
+               class="w-full px-4 py-3 rounded-xl bg-[#06161d] border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        
+        <button type="submit" id="unlockBtn" class="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition shadow-lg">
+          Déverrouiller le Tableau de bord
+        </button>
+      </form>
+
+      <div class="mt-4 pt-4 border-t border-slate-800">
+        <a href="/" class="text-xs text-slate-400 hover:text-white transition">← Retourner à la page d'accueil</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKDROP OVERLAY SUR MOBILE -->
+  <div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300"></div>
+
+  <!-- SIDEBAR GAUCHE -->
+  <aside id="mainSidebar" class="w-64 bg-[#0a232f] text-slate-200 flex flex-col justify-between shrink-0 shadow-2xl border-r border-[#153443] select-none fixed inset-y-0 left-0 z-50 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out">
+    <div class="flex-1 flex flex-col min-h-0">
+      
+      <!-- LOGO & TITRE -->
+      <div class="p-4 sm:p-5 flex items-center justify-between border-b border-[#153748] relative">
+        <div class="flex items-center gap-3 min-w-0">
+          <img src="/assets/logo-salam-omra.jpg" alt="Logo Salam Omra" class="w-10 h-10 rounded-full object-cover shrink-0 border border-emerald-400/50 shadow-sm">
+          <div class="sidebar-header-text min-w-0">
+            <h1 class="text-base font-bold tracking-wider text-white truncate leading-tight">SALAM OMRA</h1>
+            <p class="text-[11px] text-emerald-300 font-medium tracking-wide truncate">by FAREM VOYAGE LLC</p>
+          </div>
+        </div>
+
+        <!-- Bouton Replier / Déplier sur PC -->
+        <button onclick="toggleSidebar()" class="hidden md:flex p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#133748] transition shrink-0" title="Replier / Agrandir le menu">
+          <svg id="desktopFoldIcon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg>
+        </button>
+
+        <!-- Bouton Fermer sur Mobile -->
+        <button onclick="toggleSidebar(false)" class="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#133748] transition" title="Fermer le menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- NAVIGATION PRINCIPALE (ONGLETS DYNAMIQUES) -->
+      <nav class="p-3 space-y-1 text-sm font-medium overflow-y-auto custom-scroll flex-1">
+        <button onclick="switchTab('overview')" id="nav-overview" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#143e50] text-white shadow-sm border-l-4 border-amber-400 transition text-left" title="Vue d’ensemble">
+          <svg class="nav-icon w-5 h-5 text-amber-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span class="nav-text truncate">Vue d’ensemble</span>
+        </button>
+
+        <button onclick="switchTab('pelerins')" id="nav-pelerins" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Pèlerins">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span class="nav-text truncate">Pèlerins</span>
+          <span id="badge-total-pelerins" class="nav-badge ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-900/60 text-teal-300 border border-teal-700/50">0</span>
+        </button>
+
+        <button onclick="switchTab('agenda')" id="nav-agenda" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Agenda RDV">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span class="nav-text truncate">Agenda RDV</span>
+          <span id="badge-total-rdv" class="nav-badge ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-900/60 text-amber-300 border border-amber-700/50">2</span>
+        </button>
+
+        <button onclick="switchTab('messages')" id="nav-messages" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Messages Nusuk">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span class="nav-text truncate">Messages Nusuk</span>
+        </button>
+
+        <button onclick="switchTab('wallets')" id="nav-wallets" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Wallets">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          <span class="nav-text truncate">Wallets</span>
+        </button>
+
+        <button onclick="switchTab('packs')" id="nav-packs" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Choix des packs">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <span class="nav-text truncate">Choix des packs</span>
+        </button>
+
+        <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Calendrier des ventes">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span class="nav-text truncate">Calendrier des ventes</span>
+        </button>
+
+        <button onclick="switchTab('team')" id="nav-team" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Équipe">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <span class="nav-text truncate">Équipe</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-[#123342] hover:text-white transition text-left" title="Paramètres">
+          <svg class="nav-icon w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="nav-text truncate">Paramètres</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- BAS DE SIDEBAR AVEC DÉCONNEXION -->
+    <div class="p-3 border-t border-[#153748] space-y-1.5 shrink-0">
+      <button onclick="logout()" class="nav-btn w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-rose-300 hover:bg-rose-950/40 hover:text-rose-200 transition" title="Verrouiller / Quitter">
+        <svg class="nav-icon w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        <span class="sidebar-footer-text truncate">Verrouiller / Quitter</span>
+      </button>
+      <p class="sidebar-footer-text text-[10px] text-slate-400 text-center italic truncate">Accompagner vos pèlerins vers un Hajj serein</p>
+    </div>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+    
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 md:px-8 py-3 flex items-center justify-between shrink-0 shadow-sm gap-2">
+      <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <!-- Bouton hamburger (ouvre le drawer sur mobile, replie/déplie sur desktop) -->
+        <button onclick="toggleSidebar()" class="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 shadow-sm transition shrink-0" title="Menu de navigation">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <div class="min-w-0">
+          <h2 id="pageTitle" class="text-base sm:text-xl font-bold text-slate-900 tracking-tight truncate leading-tight">Tableau de bord</h2>
+          <p id="pageSubtitle" class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate hidden sm:block">Données réelles du fichier JSON des pèlerins Salam Omra</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <!-- Bouton Synchro Mon Omra -->
+        <button id="btnSyncMonOmra" onclick="triggerMonOmraSync()" title="Synchroniser automatiquement depuis l'API Mon Omra" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 shadow-sm transition">
+          <svg id="iconSyncSpinner" class="w-4 h-4 text-amber-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span id="labelSyncMonOmra" class="hidden sm:inline">Synchro Mon Omra</span>
+        </button>
+
+        <!-- Bouton Import CSV / JSON -->
+        <input type="file" id="importFileInput" accept=".csv, .json" class="hidden" onchange="triggerImport(event)">
+        <button onclick="document.getElementById('importFileInput').click()" title="Importer CSV ou JSON" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 shadow-sm transition">
+          <svg class="w-4 h-4 text-slate-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          <span class="hidden md:inline">Importer CSV / JSON</span>
+        </button>
+
+        <!-- Bouton Nouveau Pèlerin -->
+        <a href="/register.html" target="_blank" title="Inscrire un pèlerin" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+          <span class="hidden sm:inline">Nouveau pèlerin</span>
+        </a>
+
+        <!-- Profil Salah -->
+        <div class="flex items-center gap-2 pl-2 sm:pl-3 border-l border-slate-200">
+          <div class="w-8 h-8 rounded-full bg-[#0a232f] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+            S
+          </div>
+          <span class="text-xs font-bold text-slate-800 hidden lg:inline">Salah</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ZONE DYNAMIQUE DES RUBRIQUES -->
+    <div class="flex-1 overflow-y-auto custom-scroll p-4 sm:p-6 lg:p-8">
+
+      <!-- ========================================== -->
+      <!-- 1. VUE D'ENSEMBLE (DASHBOARD)              -->
+      <!-- ========================================== -->
+      <div id="tab-overview" class="space-y-6">
+        
+        <!-- 4 CARTES KPI STATISTIQUES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <div id="kpi-total" class="text-3xl font-extrabold text-slate-900 tracking-tight">77</div>
+              <div class="text-xs font-semibold text-slate-500">Pèlerins (<span id="kpi-dossiers-count">49</span> dossiers)</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <div id="kpi-prets" class="text-3xl font-extrabold text-slate-900 tracking-tight">6</div>
+              <div class="text-xs font-semibold text-slate-500">Dossiers vérifiés</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <div id="kpi-actions" class="text-3xl font-extrabold text-slate-900 tracking-tight">43</div>
+              <div class="text-xs font-semibold text-slate-500">Comptes à créer / valider</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <div>
+              <div id="kpi-bloques" class="text-3xl font-extrabold text-slate-900 tracking-tight">0</div>
+              <div class="text-xs font-semibold text-slate-500">Dossiers rejetés / bloqués</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION DOSSIERS & ÉVÉNEMENTS -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- TABLEAU DE SUIVI -->
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 flex flex-col">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                <h3 class="font-bold text-base text-slate-900">Dossiers prioritaires Nusuk</h3>
+              </div>
+
+              <!-- Filtres boutons -->
+              <div class="flex items-center gap-2">
+                <div class="inline-flex p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+                  <button onclick="setFilter('TOUS')" id="btn-tous" class="px-3 py-1 rounded-lg bg-[#0e3b4d] text-white shadow-sm transition">Tous</button>
+                  <button onclick="setFilter('URGENTS')" id="btn-urgents" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> À traiter
+                  </button>
+                  <button onclick="setFilter('MON_EQUIPE')" id="btn-equipe" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                    Conseiller 1
+                  </button>
+                </div>
+
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Rechercher..." 
+                       class="pl-3 pr-3 py-1 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 w-36">
+              </div>
+            </div>
+
+            <!-- Table aperçu -->
+            <div class="overflow-x-auto flex-1 mt-2">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 border-b border-slate-100 uppercase tracking-wider font-semibold">
+                    <th class="py-2.5 px-3">Pèlerin</th>
+                    <th class="py-2.5 px-3">Pers.</th>
+                    <th class="py-2.5 px-3">Étape</th>
+                    <th class="py-2.5 px-3">Action attendue</th>
+                    <th class="py-2.5 px-3">Conseiller</th>
+                    <th class="py-2.5 px-3 text-center">Contact</th>
+                    <th class="py-2.5 px-2 text-right"></th>
+                  </tr>
+                </thead>
+                <tbody id="dossiersTableBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Rempli par JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Affichage des dossiers récents</span>
+              <button onclick="switchTab('pelerins')" class="text-teal-600 font-bold hover:underline">Voir l'annuaire complet des pèlerins →</button>
+            </div>
+          </div>
+
+          <!-- TIMELINE NUSUK -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                  <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <h3 class="font-bold text-sm text-slate-900">Derniers événements Nusuk</h3>
+                </div>
+                <button onclick="switchTab('messages')" class="text-xs font-semibold text-teal-600 hover:text-teal-700">Voir tout</button>
+              </div>
+
+              <div id="recentEventsList" class="mt-4 relative pl-6 space-y-5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <!-- Rempli par JavaScript -->
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 bg-emerald-50/60 p-3 rounded-xl border border-emerald-100 text-[11px] text-emerald-800">
+              <span class="font-bold">Protection Zéro-OTP active :</span> Tous les codes et secrets entrants sont expurgés avant enregistrement.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 2. RUBRIQUE PÈLERINS (AVEC WHATSAPP & EMAIL) -->
+      <!-- ========================================== -->
+      <div id="tab-pelerins" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Annuaire des Pèlerins Nusuk</h3>
+              <p class="text-xs text-slate-500">Contact direct via WhatsApp, Email, et modification des statuts en direct.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+              <input type="text" id="pelerinSearch" oninput="renderPelerinsTable()" placeholder="Rechercher nom, email, tél, ville..."
+                     class="px-4 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 w-56">
+              
+              <select id="pelerinFilter" onchange="renderPelerinsTable()" class="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                <option value="ALL">Tous les statuts</option>
+                <option value="VERIFIE">Vérifiés (Nusuk)</option>
+                <option value="NON_VERIFIE">Non vérifiés</option>
+                <option value="SANS_COMPTE">Sans compte Nusuk</option>
+                <option value="FAMILLE">Groupes & Familles (>1 pers)</option>
+              </select>
+
+              <!-- SÉLECTEUR DE CLASSEMENT / TRI PAR DATE DE FORMULAIRE -->
+              <select id="pelerinSort" onchange="renderPelerinsTable()" class="px-3 py-2 text-xs bg-amber-50 border border-amber-300 rounded-xl focus:outline-none font-bold text-amber-950 shadow-sm cursor-pointer">
+                <option value="OLDEST">⏳ Date : Plus anciens d'abord (Priorité d'appel)</option>
+                <option value="NEWEST">⏱️ Date : Plus récents d'abord</option>
+                <option value="NAME">🔤 Nom alphabétique (A-Z)</option>
+                <option value="URGENT">🚨 Urgences / Bloqués d'abord</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tableau riche des pèlerins avec boutons directs -->
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-100 uppercase tracking-wider font-semibold">
+                  <th class="py-3 px-3">Date d'inscription</th>
+                  <th class="py-3 px-3">Réf / Nom Complet</th>
+                  <th class="py-3 px-3">Nationalité</th>
+                  <th class="py-3 px-3">Contact</th>
+                  <th class="py-3 px-3 text-center">Actions Contact</th>
+                  <th class="py-3 px-3">Personnes</th>
+                  <th class="py-3 px-3">Compte Nusuk</th>
+                  <th class="py-3 px-3">Statut Vérification</th>
+                  <th class="py-3 px-3">Honoraires</th>
+                  <th class="py-3 px-3">Conseiller</th>
+                  <th class="py-3 px-2 text-right">Gestion</th>
+                </tr>
+              </thead>
+              <tbody id="fullPelerinsTableBody" class="divide-y divide-slate-100 font-medium">
+                <!-- Rempli par JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 3. RUBRIQUE AGENDA RDV TÉLÉPHONIQUES       -->
+      <!-- ========================================== -->
+      <div id="tab-agenda" class="hidden space-y-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- FORMULAIRE DE PLANIFICATION RDV -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+            <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
+              <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Planifier un appel téléphonique
+            </h3>
+            <p class="text-xs text-slate-500 mb-5">Calez un point téléphonique avec un pèlerin selon ses créneaux de disponibilité.</p>
+
+            <form onsubmit="handleCreateRdv(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Sélectionner le pèlerin *</label>
+                <select id="rdvPelerinSelect" onchange="autoFillRdvPhone()" required class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                  <option value="">-- Choisir un pèlerin --</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Numéro de téléphone</label>
+                <input type="text" id="rdvPhone" placeholder="+33 6..." required
+                       class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold text-slate-700 mb-1">Date *</label>
+                  <input type="date" id="rdvDate" required
+                         class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 mb-1">Heure *</label>
+                  <input type="time" id="rdvTime" required
+                         class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Sujet de l'appel *</label>
+                <input type="text" id="rdvSubject" placeholder="Ex : Aide création compte Nusuk / Validation passeport" required
+                       class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Conseiller responsable</label>
+                <select id="rdvAdvisor" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none">
+                  <option value="Conseiller 1">Conseiller 1 (Salah)</option>
+                  <option value="Conseiller 2">Conseiller 2</option>
+                </select>
+              </div>
+
+              <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-[#0a232f] hover:bg-[#123e53] text-white font-bold text-xs shadow transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                <span>Enregistrer le RDV</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- LISTE DES RENDEZ-VOUS PLANIFIÉS -->
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Prochains rendez-vous programmés</h3>
+                  <p class="text-xs text-slate-500">Appel direct via téléphone ou WhatsApp en un clic.</p>
+                </div>
+                <span id="rdvCountBadge" class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-bold text-xs border border-amber-200">
+                  2 RDV
+                </span>
+              </div>
+
+              <div id="appointmentsList" class="mt-4 space-y-3">
+                <!-- Rempli par JavaScript -->
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 bg-slate-50 p-3.5 rounded-xl text-[11px] text-slate-500 flex items-center justify-between">
+              <span>Rappel : Respectez les créneaux préférés indiqués par chaque pèlerin dans son dossier.</span>
+              <span class="text-teal-700 font-bold">Fuseau : Europe / Paris</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 4. RUBRIQUE MESSAGES NUSUK                  -->
+      <!-- ========================================== -->
+      <div id="tab-messages" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Centre de Messagerie Sécurisé Nusuk</h3>
+              <p class="text-xs text-slate-500">Tous les emails reçus des pèlerins sont filtrés : zéro secret ou OTP n'est conservé.</p>
+            </div>
+            <span class="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">
+              ✓ Filtre Anti-OTP Actif
+            </span>
+          </div>
+
+          <div class="mt-4 space-y-3" id="messagesInboxList">
+            <!-- Rempli par JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 5. RUBRIQUE WALLETS                         -->
+      <!-- ========================================== -->
+      <div id="tab-wallets" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Suivi des Portefeuilles e-Wallet Nusuk</h3>
+              <p class="text-xs text-slate-500">Statuts d'approvisionnement des portefeuilles officiels en Riyal Saoudien (SAR).</p>
+            </div>
+            <span class="text-xs text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 font-semibold">
+              Aucun fonds ne transite par Salam Omra (RB11)
+            </span>
+          </div>
+
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-100 uppercase tracking-wider font-semibold">
+                  <th class="py-3 px-3">Pèlerin</th>
+                  <th class="py-3 px-3">Pers.</th>
+                  <th class="py-3 px-3">Solde Estimé Requis</th>
+                  <th class="py-3 px-3">Statut e-Wallet</th>
+                  <th class="py-3 px-3">Dernière Détection</th>
+                  <th class="py-3 px-3">Vérification Plafond CB</th>
+                  <th class="py-3 px-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="walletsTableBody" class="divide-y divide-slate-100 font-medium">
+                <!-- Rempli par JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 6. RUBRIQUE CHOIX DES PACKS                 -->
+      <!-- ========================================== -->
+      <div id="tab-packs" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Arbitrage des Choix de Packages</h3>
+              <p class="text-xs text-slate-500">Gestion des 3 choix de formules par dossier pour réagir en moins de 3 minutes le jour de vente.</p>
+            </div>
+            <span class="text-xs text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-200 font-bold">
+              Prestataire officiel : Yusr Al Mashaer
+            </span>
+          </div>
+
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-100 uppercase tracking-wider font-semibold">
+                  <th class="py-3 px-3">Pèlerin</th>
+                  <th class="py-3 px-3">Prestataire Demandé</th>
+                  <th class="py-3 px-3">1er Choix</th>
+                  <th class="py-3 px-3">2ème Choix (Repli)</th>
+                  <th class="py-3 px-3">Plafond Validé</th>
+                  <th class="py-3 px-3">Statut Accord</th>
+                  <th class="py-3 px-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="packsTableBody" class="divide-y divide-slate-100 font-medium">
+                <!-- Rempli par JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 7. RUBRIQUE CALENDRIER DES VENTES           -->
+      <!-- ========================================== -->
+      <div id="tab-calendar" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Calendrier des Ventes Nusuk Hajj 2026</h3>
+              <p class="text-xs text-slate-500">Double horloge Paris / Riyad pour ne manquer aucune ouverture surprise nocturne.</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs font-bold">
+              <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">
+                🇫🇷 Paris : <span id="clockParis" class="font-mono text-teal-700">--:--:--</span>
+              </span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200">
+                🇸🇦 Riyad (+2h) : <span id="clockMecca" class="font-mono text-amber-800">--:--:--</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="p-5 rounded-2xl bg-amber-50/60 border border-amber-200 text-xs space-y-3">
+              <div class="flex justify-between items-center font-bold">
+                <span class="text-amber-900 uppercase">Vague 1 • Packages VIP</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500 text-white text-[10px]">EN ATTENTE DATE</span>
+              </div>
+              <p class="text-slate-600">Surveillance active des serveurs saoudiens. Alertes SMS/WhatsApp prêtes pour réveiller les conseillers.</p>
+              <div class="text-[11px] text-amber-800 font-semibold">Heure prévisionnelle : 03h00 (Heure de Riyad)</div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+              <div class="flex justify-between items-center font-bold">
+                <span class="text-slate-800 uppercase">Vague 2 • Packages Shifting</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-600 text-[10px]">NON PLANIFIÉ</span>
+              </div>
+              <p class="text-slate-600">Ouverture généralement 48h après la première vague selon le remplissage des vols internationaux.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+              <div class="flex justify-between items-center font-bold">
+                <span class="text-slate-800 uppercase">Vague 3 • Places Réinjectées</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-600 text-[10px]">ULTÉRIEURE</span>
+              </div>
+              <p class="text-slate-600">Récupération des forfaits abandonnés ou dont les e-Wallets n'ont pas été payés dans les 48h imparties.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 8. RUBRIQUE ÉQUIPE                          -->
+      <!-- ========================================== -->
+      <div id="tab-team" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                  Conciergerie Salam Omra
+                </span>
+                <span id="teamBadgeCount" class="text-xs text-slate-500 font-semibold">2 membres actifs</span>
+              </div>
+              <h3 class="text-xl font-extrabold text-slate-900 mt-1">Équipe & Répartition des dossiers</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Gérez les conseillers (Conseiller 1, 2, 3...), suivez leur charge en temps réel et équilibrez les dossiers.</p>
+            </div>
+
+            <!-- BOUTONS D'ACTION ÉQUIPE -->
+            <div class="flex flex-wrap items-center gap-2.5">
+              <button onclick="repartirDossiersEquitablement()" 
+                      title="Distribue automatiquement l'ensemble des pèlerins équitablement entre tous les conseillers disponibles"
+                      class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs flex items-center gap-2 shadow-sm transition">
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span>⚡ Répartir équitablement les dossiers</span>
+              </button>
+
+              <button onclick="openAddTeamMemberModal()" 
+                      class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-teal-900/10 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                <span>+ Ajouter un conseiller</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- BANDEAU STATISTIQUES ÉQUIPE -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Effectif Conciergerie</span>
+                <span id="statTeamTotal" class="text-lg font-extrabold text-slate-900">0 conseillers</span>
+              </div>
+              <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-sm">👥</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Total Dossiers Pris en Charge</span>
+                <span id="statTeamDossiers" class="text-lg font-extrabold text-slate-900">0 dossiers</span>
+              </div>
+              <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">📋</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Moyenne de Charge</span>
+                <span id="statTeamMoyenne" class="text-lg font-extrabold text-slate-900">0 dos./cons.</span>
+              </div>
+              <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-sm">⚖️</div>
+            </div>
+          </div>
+
+          <!-- GRILLE DYNAMIQUE DES CARTES CONSEILLERS -->
+          <div id="teamCardsContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rempli dynamiquement par renderTeamView() -->
+            <div class="p-8 text-center text-slate-400 col-span-full">Chargement de l'équipe...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 9. RUBRIQUE PARAMÈTRES & CONFIGURATION STRIPE -->
+      <!-- ========================================== -->
+      <div id="tab-settings" class="hidden space-y-6">
+        
+        <!-- FICHE PRODUIT STRIPE & CONFIGURATION DU LIEN -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- COLONNE GAUCHE (7 cols) : FICHE PRODUIT STRIPE COMPLÈTE -->
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-6">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-600 font-extrabold flex items-center justify-center text-xs">
+                  S
+                </span>
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Fiche Produit Stripe (390 €)</h3>
+                  <p class="text-[11px] text-slate-500">Configuration officielle du produit et du paiement en ligne</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+                ✓ Prêt pour Stripe
+              </span>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Nom du Produit (Dashboard Stripe)</span>
+                <div class="font-bold text-slate-900 text-sm mt-0.5" id="stripeProductNameView">Assistance & Conciergerie Hajj Nusuk 2026</div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Tarif / Prix Unitaire</span>
+                  <div class="font-bold text-amber-700 text-base mt-0.5">390,00 € TTC</div>
+                  <span class="text-[10px] text-slate-500 font-medium">Paiement unique (One-time)</span>
+                </div>
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Libellé Relevé Bancaire</span>
+                  <div class="font-mono font-bold text-slate-900 text-sm mt-0.5">SALAM OMRA HAJJ</div>
+                  <span class="text-[10px] text-slate-500 font-medium">Descriptor Stripe sécurisé</span>
+                </div>
+              </div>
+
+              <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Description juridique du produit</span>
+                <p class="text-slate-700 mt-1 leading-relaxed">
+                  Accompagnement technique & administratif : audit des passeports, paramétrage du e-Wallet Nusuk, arbitrage des formules officielles et alertes en temps réel lors de l'ouverture des ventes officielles Nusuk.
+                </p>
+                <div class="mt-2 text-[10px] text-slate-500 italic">
+                  * Note juridique légale : prestation de conseil et d'assistance n'agissant pas comme voyagiste pour l'achat du forfait officiel saoudien.
+                </div>
+              </div>
+
+              <!-- CONFIGURATION DE LA GRILLE STRIPE MODULAIRE (4 SERVICES) -->
+              <div class="p-4 rounded-xl bg-indigo-50/60 border border-indigo-100 space-y-3.5">
+                <div class="flex items-center justify-between pb-2 border-b border-indigo-100/80">
+                  <label class="font-bold text-indigo-950 text-sm">Liens de Paiement Stripe des Services Modulaires</label>
+                  <span class="text-[10px] text-indigo-700 font-bold bg-indigo-100/70 px-2 py-0.5 rounded-full">4 Offres Actives</span>
+                </div>
+
+                <!-- 1. MODULE 1 (90 €) -->
+                <div class="space-y-1">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-slate-800">Étape 1 : Starter Profil & Vérification Nusuk</span>
+                    <span class="text-indigo-800 font-extrabold bg-indigo-100/70 px-2 py-0.5 rounded-full">90,00 €</span>
+                  </div>
+                  <input type="text" id="stripeModule1Input" 
+                         value=""
+                         class="w-full px-3 py-1.5 rounded-xl bg-white border border-indigo-200 font-mono text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <p class="text-[10px] text-slate-400">Création compte, conformité passeport/photos jusqu'à la pastille verte officielle.</p>
+                </div>
+
+                <!-- 2. MODULE 2 (140 €) -->
+                <div class="space-y-1 pt-2 border-t border-indigo-100/80">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-slate-800">Étape 2 : Recharge & Sécurité E-Wallet</span>
+                    <span class="text-indigo-800 font-extrabold bg-indigo-100/70 px-2 py-0.5 rounded-full">140,00 €</span>
+                  </div>
+                  <input type="text" id="stripeModule2Input" 
+                         value=""
+                         class="w-full px-3 py-1.5 rounded-xl bg-white border border-indigo-200 font-mono text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <p class="text-[10px] text-slate-400">Déblocage plafonds bancaires et sécurisation du solde séquestre en Riyals (SAR).</p>
+                </div>
+
+                <!-- 3. MODULE 3 (240 €) -->
+                <div class="space-y-1 pt-2 border-t border-indigo-100/80">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-slate-800">Étape 3 : Sprint Réservation Jour J</span>
+                    <span class="text-indigo-800 font-extrabold bg-indigo-100/70 px-2 py-0.5 rounded-full">240,00 €</span>
+                  </div>
+                  <input type="text" id="stripeModule3Input" 
+                         value=""
+                         class="w-full px-3 py-1.5 rounded-xl bg-white border border-indigo-200 font-mono text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <p class="text-[10px] text-slate-400">Veille H24 forfaits Yusr Al Mashaer et assistance d'urgence lors de l'ouverture des ventes.</p>
+                </div>
+
+                <!-- 4. PACK SÉRÉNITÉ COMPLÈTE (390 €) -->
+                <div class="space-y-1 pt-2 border-t border-indigo-100/80">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-amber-900">👑 Pack Sérénité Complète (Tout-en-un 390 €)</span>
+                    <span class="text-amber-800 font-extrabold bg-amber-100 px-2 py-0.5 rounded-full">390,00 €</span>
+                  </div>
+                  <input type="text" id="stripePaymentLinkInput" 
+                         value=""
+                         class="w-full px-3 py-1.5 rounded-xl bg-white border border-amber-300 font-mono text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                  <p class="text-[10px] text-slate-400">Pack complet réunissant les 3 étapes de A à Z avec conseiller dédié.</p>
+                </div>
+
+                <!-- 5. TARIF FIDÉLITÉ ANCIENS CLIENTS (350 €) -->
+                <div class="space-y-1 pt-2 border-t border-indigo-100/80">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-purple-900">Tarif Fidélité Pack Complet (350 €)</span>
+                    <span class="text-purple-800 font-extrabold bg-purple-100 px-2 py-0.5 rounded-full">350,00 €</span>
+                  </div>
+                  <input type="text" id="stripePrefPaymentLinkInput" 
+                         value=""
+                         class="w-full px-3 py-1.5 rounded-xl bg-white border border-purple-200 font-mono text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+
+                <!-- 6. CODE PROMO -->
+                <div class="space-y-1 pt-2 border-t border-indigo-100/80">
+                  <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-slate-700">Code Promotionnel Stripe</span>
+                    <input type="text" id="stripePromoCodeInput" value="FIDELITE40"
+                           class="w-32 px-2 py-1 rounded-lg bg-white border border-slate-300 font-mono text-center font-bold text-xs uppercase">
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <button onclick="saveStripeLink()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition flex items-center justify-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                    <span>Enregistrer la grille tarifaire Stripe</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- PARAMÈTRES RECOMMANDÉS DANS STRIPE -->
+              <div class="p-3.5 rounded-xl border border-slate-200 bg-white">
+                <span class="font-bold text-slate-800 block mb-2">Options recommandées pour le lien de paiement Stripe :</span>
+                <ul class="space-y-1.5 text-slate-600 text-[11px]">
+                  <li class="flex items-center gap-2">
+                    <span class="text-teal-600 font-bold">✓</span> <strong>Collecter le numéro de téléphone</strong> : Activé (indispensable pour l'assistance WhatsApp).
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-teal-600 font-bold">✓</span> <strong>Collecter l'adresse de facturation</strong> : Activé (conformité TVA / facturation B2C).
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-teal-600 font-bold">✓</span> <strong>Redirection après confirmation</strong> : <code>http://localhost:3002/register?payment=success</code>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-teal-600 font-bold">✓</span> <strong>Webhook serveur</strong> : <code>POST /api/v1/webhooks/stripe</code> (événement <code>checkout.session.completed</code>).
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- COLONNE DROITE (5 cols) : REGISTRE FINANCIER & STATUTS SYSTÈME -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <!-- REGISTRE FINANCIER (LEDGER IMMUABLE) -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="text-sm font-bold text-slate-900">Registre Financier (Ledger)</h3>
+                <span id="ledgerTotalBadge" class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-extrabold text-[11px]">
+                  0 €
+                </span>
+              </div>
+
+              <div id="ledgerContainer" class="space-y-2.5 max-h-64 overflow-y-auto custom-scroll text-xs">
+                <!-- Rempli dynamiquement -->
+                <div class="p-4 text-center text-slate-400 italic">Chargement du registre...</div>
+              </div>
+            </div>
+
+            <!-- PARAMÈTRES SYSTÈME -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4 text-xs">
+              <h3 class="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100">Sécurité & Système</h3>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Mot de passe Conciergerie</label>
+                <input type="password" value="salamomra2026" disabled
+                       class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-mono">
+                <p class="text-[10px] text-slate-400 mt-1">Configurable via variable d'environnement <code>CONCIERGERIE_PASSWORD</code>.</p>
+              </div>
+
+              <div class="pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <button onclick="downloadJsonBackup()" class="w-full py-2.5 rounded-xl bg-slate-800 text-white font-bold hover:bg-slate-700 transition">
+                  Exporter la base de données (JSON)
+                </button>
+                <button onclick="logout()" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-700 font-bold hover:bg-rose-100 border border-rose-200 transition">
+                  Se déconnecter de la conciergerie
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL DÉTAIL & MODIFICATION STATUT PÈLERIN -->
+  <div id="pelerinDetailModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scroll">
+      <button onclick="closePelerinModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 font-extrabold flex items-center justify-center text-base" id="modalInitial">
+          P
+        </div>
+        <div class="flex-1">
+          <h3 class="text-lg font-bold text-slate-900" id="modalFullName">Nom du Pèlerin</h3>
+          <div class="flex flex-wrap items-center gap-2 mt-0.5">
+            <span class="text-xs text-slate-500 font-mono" id="modalRef">HAJJ-2026-001</span>
+            <span id="modalDateBadge" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700"></span>
+            <span id="modalLastContactBadge" class="hidden px-2 py-0.5 rounded-full text-[10px] font-semibold"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOUTONS D'ACTION DIRECTS (WHATSAPP, EMAIL, RDV) -->
+      <div class="flex flex-wrap items-center gap-2 pb-4 mb-4 border-b border-slate-100">
+        <a id="modalWhatsappBtn" href="#" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-sm transition">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+          <span>Message WhatsApp</span>
+        </a>
+
+        <a id="modalEmailBtn" href="#"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span>Envoyer un Email</span>
+        </a>
+
+        <button onclick="scheduleRdvForCurrentPelerin()"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span>Planifier Appel</span>
+        </button>
+      </div>
+
+      <!-- SÉLECTEUR DE SERVICES MODULAIRES & LIENS STRIPE -->
+      <div class="mb-4 p-3 bg-gradient-to-br from-indigo-50/80 via-slate-50 to-indigo-50/40 rounded-2xl border border-indigo-150 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Proposer un Service Modulaire ou Partager un Lien</span>
+          </h4>
+          <span class="text-[10px] text-indigo-700 font-bold bg-indigo-100/70 px-2 py-0.5 rounded-full">4 Liens Stripe & WhatsApp</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <!-- Module 1 -->
+          <div class="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between">
+            <div>
+              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Étape 1</span>
+              <div class="font-bold text-slate-900 text-[11px] leading-tight mt-0.5">Profil & Validation</div>
+              <div class="text-indigo-700 font-extrabold text-xs mt-1">90 €</div>
+            </div>
+            <div class="mt-2.5 flex items-center gap-1">
+              <button type="button" onclick="copyServiceLink('module1')" title="Copier le lien Stripe 90 €"
+                      class="flex-1 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] font-bold text-slate-700 transition flex items-center justify-center gap-0.5">
+                📋 Copier
+              </button>
+              <button type="button" onclick="sendServiceWhatsApp('module1')" title="Envoyer par WhatsApp"
+                      class="p-1 rounded-lg bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-600 transition flex items-center justify-center">
+                💬
+              </button>
+            </div>
+          </div>
+
+          <!-- Module 2 -->
+          <div class="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between">
+            <div>
+              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Étape 2</span>
+              <div class="font-bold text-slate-900 text-[11px] leading-tight mt-0.5">Recharge Wallet</div>
+              <div class="text-indigo-700 font-extrabold text-xs mt-1">140 €</div>
+            </div>
+            <div class="mt-2.5 flex items-center gap-1">
+              <button type="button" onclick="copyServiceLink('module2')" title="Copier le lien Stripe 140 €"
+                      class="flex-1 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] font-bold text-slate-700 transition flex items-center justify-center gap-0.5">
+                📋 Copier
+              </button>
+              <button type="button" onclick="sendServiceWhatsApp('module2')" title="Envoyer par WhatsApp"
+                      class="p-1 rounded-lg bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-600 transition flex items-center justify-center">
+                💬
+              </button>
+            </div>
+          </div>
+
+          <!-- Module 3 -->
+          <div class="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between">
+            <div>
+              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Étape 3</span>
+              <div class="font-bold text-slate-900 text-[11px] leading-tight mt-0.5">Sprint Réservation</div>
+              <div class="text-indigo-700 font-extrabold text-xs mt-1">240 €</div>
+            </div>
+            <div class="mt-2.5 flex items-center gap-1">
+              <button type="button" onclick="copyServiceLink('module3')" title="Copier le lien Stripe 240 €"
+                      class="flex-1 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] font-bold text-slate-700 transition flex items-center justify-center gap-0.5">
+                📋 Copier
+              </button>
+              <button type="button" onclick="sendServiceWhatsApp('module3')" title="Envoyer par WhatsApp"
+                      class="p-1 rounded-lg bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-600 transition flex items-center justify-center">
+                💬
+              </button>
+            </div>
+          </div>
+
+          <!-- Pack Complet -->
+          <div class="p-2.5 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/70 border border-amber-300 shadow-xs flex flex-col justify-between">
+            <div>
+              <span class="block text-[9px] font-bold text-amber-800 uppercase tracking-wider">Tout-en-un</span>
+              <div class="font-bold text-slate-900 text-[11px] leading-tight mt-0.5">Pack Sérénité</div>
+              <div class="text-amber-900 font-extrabold text-xs mt-1" id="modalPackCompletPrice">390 €</div>
+            </div>
+            <div class="mt-2.5 flex items-center gap-1">
+              <button type="button" onclick="copyServiceLink('packComplet')" title="Copier le lien Stripe Pack Complet"
+                      class="flex-1 py-1 rounded-lg bg-white hover:bg-amber-100 text-[10px] font-bold text-slate-800 transition flex items-center justify-center gap-0.5">
+                📋 Copier
+              </button>
+              <button type="button" onclick="sendServiceWhatsApp('packComplet')" title="Envoyer par WhatsApp"
+                      class="p-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center justify-center">
+                💬
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIQUE DES ÉCHANGES ET CONTACTS EN DIRECT -->
+      <div class="mb-4 p-3.5 bg-slate-50/90 rounded-2xl border border-slate-200/90 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span>Journal des Échanges & Communications</span>
+          </h4>
+          <span id="modalInteractionsCount" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200">0 échange(s)</span>
+        </div>
+
+        <!-- Formulaire rapide pour consigner un appel ou note manuelle -->
+        <div class="flex gap-2">
+          <input type="text" id="manualContactNote" placeholder="Ajouter une note d'appel ou de suivi..."
+                 class="flex-1 px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-teal-500">
+          <button type="button" onclick="submitManualContactNote()"
+                  class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition shrink-0">
+            + Noter
+          </button>
+        </div>
+
+        <!-- Liste chronologique des interactions -->
+        <div id="modalInteractionsList" class="space-y-1.5 max-h-36 overflow-y-auto custom-scroll text-xs pt-1">
+          <!-- Rempli dynamiquement -->
+        </div>
+      </div>
+
+      <!-- FORMULAIRE DE MODIFICATION DES STATUTS -->
+      <form onsubmit="savePelerinStatus(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="editPelerinId">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Statut Vérification Nusuk</label>
+            <select id="editNusukStatus" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none">
+              <option value="NON_VERIFIE">NON_VERIFIE (En attente)</option>
+              <option value="VERIFIE">VERIFIE (Validé officiel)</option>
+              <option value="REJETE">REJETE (Problème document)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Étape du parcours</label>
+            <select id="editEtape" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none">
+              <option value="Inscription">Inscription</option>
+              <option value="Documents">Documents</option>
+              <option value="Wallet">Wallet</option>
+              <option value="Packs">Packs</option>
+              <option value="PRET_POUR_VENTE">Prêt pour vente</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Action attendue / Prochaine étape</label>
+            <input type="text" id="editActionAttendue" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Conseiller affecté</label>
+            <select id="editConseiller" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none">
+              <option value="Conseiller 1">Conseiller 1 (Salah)</option>
+              <option value="Conseiller 2">Conseiller 2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200/90 space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-amber-950 mb-1">Tarif Client Appliqué</label>
+              <select id="editTarifType" onchange="handleTarifChange()" class="w-full px-3 py-2 rounded-xl bg-white border border-amber-300 font-semibold focus:outline-none">
+                <option value="STANDARD">Tarif Standard (390 €)</option>
+                <option value="ANCIEN_CLIENT">Ancien Client / Fidélité (350 €)</option>
+                <option value="PERSONNALISE">Tarif spécifique...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-amber-950 mb-1">Montant à Encaisser (€)</label>
+              <input type="number" id="editTarifMontant" value="390"
+                     class="w-full px-3 py-2 rounded-xl bg-white border border-amber-300 font-bold text-amber-900 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-2.5 border-t border-amber-200/60">
+            <div>
+              <label class="block font-bold text-amber-950 mb-1">Statut Règlement</label>
+              <select id="editStatutPaiement" class="w-full px-3 py-2 rounded-xl bg-white border border-amber-300 font-semibold focus:outline-none">
+                <option value="EN_ATTENTE">EN_ATTENTE (Non réglé)</option>
+                <option value="PAYE">PAYÉ (Encaissé)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-amber-950 mb-1">Mode / Réf. Règlement</label>
+              <input type="text" id="editRefPaiement" placeholder="Stripe / Virement / CB..."
+                     class="w-full px-3 py-2 rounded-xl bg-white border border-amber-300 font-semibold focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Notes internes & Suivi administratif</label>
+          <textarea id="editAdminNotes" rows="2" placeholder="Notes visibles uniquement par l'équipe..."
+                    class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-2 text-xs border-t border-slate-100 pt-3">
+          <div class="flex justify-between"><span class="text-slate-500">Téléphone :</span><span id="modalPhone" class="font-bold text-slate-800"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Email :</span><span id="modalEmail" class="font-bold text-slate-800"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Nationalité / Ville :</span><span id="modalNat" class="font-bold text-slate-800"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Personnes rattachées :</span><span id="modalPeople" class="font-extrabold text-teal-700"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Disponibilité déclarée :</span><span id="modalSlot" class="text-slate-700 font-medium"></span></div>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+          <button type="button" onclick="closePelerinModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">
+            Fermer
+          </button>
+          
+          <button type="submit" id="saveStatusBtn" class="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Enregistrer les modifications</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AJOUT / MODIFICATION MEMBRE ÉQUIPE -->
+  <div id="teamMemberModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scroll">
+      <button onclick="closeTeamMemberModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-5 pb-3 border-b border-slate-100">
+        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-extrabold text-base">
+          👤
+        </div>
+        <div>
+          <h3 class="text-lg font-extrabold text-slate-900" id="teamModalTitle">Ajouter un conseiller</h3>
+          <p class="text-xs text-slate-500">Affectation des dossiers pèlerins et suivi opérationnel</p>
+        </div>
+      </div>
+
+      <form onsubmit="saveTeamMember(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="teamMemberId">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Identifiant d'équipe *</label>
+            <input type="text" id="teamIdentifiant" required placeholder="Ex: Conseiller 3"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
+            <p class="text-[10px] text-slate-400 mt-0.5">Identifiant unique (Conseiller 1, 2, 3...)</p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Prénom de contact *</label>
+            <input type="text" id="teamPrenom" required placeholder="Ex: Samir"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
+            <p class="text-[10px] text-slate-400 mt-0.5">Utilisé dans les messages WhatsApp/Email</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nom complet *</label>
+            <input type="text" id="teamNom" required placeholder="Ex: Samir Benali"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Rôle / Spécialité</label>
+            <input type="text" id="teamRole" placeholder="Ex: Assistance Nusuk & Ventes"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Adresse Email</label>
+            <input type="email" id="teamEmail" placeholder="faremvoyage@outlook.fr"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Téléphone de contact</label>
+            <input type="tel" id="teamTelephone" placeholder="+33 6 12 34 56 78"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Statut opérationnel</label>
+            <select id="teamStatut" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold focus:outline-none">
+              <option value="DISPONIBLE">🟢 DISPONIBLE (Actif)</option>
+              <option value="OCCUPE">🟡 OCCUPE (Charge élevée)</option>
+              <option value="EN_CONGE">🏖️ EN CONGE (Exclu du Round-Robin)</option>
+              <option value="INACTIF">⚪ INACTIF</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Boîte synchronisée</label>
+            <input type="text" id="teamBoiteSync" placeholder="Ex: Gmail API (Pub/Sub)" value="Gmail API (Pub/Sub)"
+                   class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeTeamMemberModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">
+            Annuler
+          </button>
+          
+          <button type="submit" id="saveTeamMemberBtn" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-md shadow-teal-900/10 transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <span>Enregistrer le membre</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL SUPPRESSION & RÉATTRIBUTION MEMBRE ÉQUIPE -->
+  <div id="deleteTeamModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center text-xl mb-3">
+        ⚠️
+      </div>
+      <h3 class="text-lg font-bold text-slate-900">Supprimer ce membre d'équipe ?</h3>
+      <p class="text-xs text-slate-500 mt-1" id="deleteTeamConfirmText">
+        Vous êtes sur le point de retirer ce membre de l'équipe.
+      </p>
+
+      <div class="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-2">
+        <label class="block font-bold text-amber-900">Réattribuer ses dossiers pèlerins à :</label>
+        <select id="reassignAdvisorSelect" class="w-full px-3 py-2 rounded-xl bg-white border border-amber-300 font-semibold focus:outline-none">
+          <!-- Rempli dynamiquement -->
+        </select>
+        <p class="text-[11px] text-amber-800">Tous les dossiers actuellement suivis par ce membre seront instantanément transférés vers le conseiller sélectionné.</p>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 mt-5">
+        <button onclick="closeDeleteTeamModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">
+          Annuler
+        </button>
+        <button onclick="confirmDeleteTeamMember()" id="confirmDeleteTeamBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow transition">
+          Confirmer la suppression
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT GLOBAL -->
+  <script>
+    let allPelerins = [];
+    let allAppointments = [];
+    let allTeamMembers = [];
+    let stripeGlobalConfig = {
+      productName: "Assistance & Conciergerie Hajj Nusuk 2026",
+      unitAmountEur: 390.0,
+      paymentLinkUrl: "",
+      preferentialPaymentLinkUrl: ""
+    };
+    let currentFilter = 'TOUS';
+    let currentTab = 'overview';
+    let activeModalPelerin = null;
+
+    // 1. AUTHENTIFICATION
+    function checkAuth() {
+      const isAuth = sessionStorage.getItem('salamomra_logged_in');
+      if (!isAuth) {
+        document.getElementById('authModal').classList.remove('hidden');
+      }
+    }
+
+    async function unlockDashboard(e) {
+      e.preventDefault();
+      const p = document.getElementById('gatePassword').value;
+      const errorDiv = document.getElementById('authError');
+      const btn = document.getElementById('unlockBtn');
+
+      btn.disabled = true;
+      btn.textContent = "Vérification...";
+      errorDiv.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: p })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          sessionStorage.setItem('salamomra_logged_in', 'true');
+          document.getElementById('authModal').classList.add('hidden');
+          loadData();
+        } else {
+          errorDiv.textContent = data.error || "Mot de passe incorrect";
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorDiv.textContent = "Erreur de connexion : " + err.message;
+        errorDiv.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Déverrouiller le Tableau de bord";
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch('/api/v1/auth/logout', { method: 'POST' });
+      } catch (_) {}
+      sessionStorage.removeItem('salamomra_logged_in');
+      window.location.href = '/login';
+    }
+
+    // 2. ONGLETS DYNAMIQUES
+    function switchTab(tabId) {
+      currentTab = tabId;
+
+      const tabs = ['overview', 'pelerins', 'agenda', 'messages', 'wallets', 'packs', 'calendar', 'team', 'settings'];
+      const titles = {
+        'overview': { title: 'Tableau de bord', sub: 'Données réelles du fichier JSON des pèlerins Salam Omra' },
+        'pelerins': { title: 'Annuaire des Pèlerins', sub: 'Actions WhatsApp, Email et mise à jour de statut' },
+        'agenda': { title: 'Agenda RDV Téléphoniques', sub: 'Planification des appels et suivi des créneaux' },
+        'messages': { title: 'Messages Nusuk', sub: 'Boîte de réception sécurisée et expurgée de secrets' },
+        'wallets': { title: 'Suivi des Wallets', sub: 'Statuts des portefeuilles officiels en Riyal Saoudien' },
+        'packs': { title: 'Choix des Packs', sub: 'Arbitrage des formules Yusr Al Mashaer' },
+        'calendar': { title: 'Calendrier des Ventes', sub: 'Veille horaire Paris / Riyad pour les ouvertures' },
+        'team': { title: 'Équipe Conciergerie', sub: 'Répartition des dossiers et statut des conseillers' },
+        'settings': { title: 'Paramètres', sub: 'Configuration de la conciergerie et exports' }
+      };
+
+      tabs.forEach(t => {
+        const section = document.getElementById(`tab-${t}`);
+        const navBtn = document.getElementById(`nav-${t}`);
+        if (section) {
+          section.classList.toggle('hidden', t !== tabId);
+        }
+        if (navBtn) {
+          if (t === tabId) {
+            navBtn.classList.add('bg-[#143e50]', 'text-white', 'shadow-sm', 'border-l-4', 'border-amber-400');
+            navBtn.classList.remove('text-slate-300', 'hover:bg-[#123342]');
+          } else {
+            navBtn.classList.remove('bg-[#143e50]', 'text-white', 'shadow-sm', 'border-l-4', 'border-amber-400');
+            navBtn.classList.add('text-slate-300', 'hover:bg-[#123342]', 'hover:text-white');
+          }
+        }
+      });
+
+      if (window.innerWidth < 768) {
+        toggleSidebar(false);
+      }
+
+      if (titles[tabId]) {
+        document.getElementById('pageTitle').textContent = titles[tabId].title;
+        document.getElementById('pageSubtitle').textContent = titles[tabId].sub;
+      }
+
+      if (tabId === 'pelerins') renderPelerinsTable();
+      if (tabId === 'agenda') renderAppointmentsView();
+      if (tabId === 'wallets') renderWalletsTable();
+      if (tabId === 'packs') renderPacksTable();
+      if (tabId === 'settings') renderSettingsView();
+    }
+
+    // GESTION DU REGISTRE FINANCIER & CONFIGURATION STRIPE
+    async function renderSettingsView() {
+      try {
+        const [resConfig, resLedger] = await Promise.all([
+          fetch('/api/v1/stripe/config').then(r => r.json()),
+          fetch('/api/v1/payments/ledger').then(r => r.json())
+        ]);
+
+        if (resConfig && resConfig.config) {
+          stripeGlobalConfig = resConfig.config;
+          const m1Input = document.getElementById('stripeModule1Input');
+          if (m1Input) m1Input.value = resConfig.config.module1PaymentLinkUrl || '';
+          const m2Input = document.getElementById('stripeModule2Input');
+          if (m2Input) m2Input.value = resConfig.config.module2PaymentLinkUrl || '';
+          const m3Input = document.getElementById('stripeModule3Input');
+          if (m3Input) m3Input.value = resConfig.config.module3PaymentLinkUrl || '';
+          const input = document.getElementById('stripePaymentLinkInput');
+          if (input) input.value = resConfig.config.packCompletPaymentLinkUrl || resConfig.config.paymentLinkUrl || '';
+          const prefInput = document.getElementById('stripePrefPaymentLinkInput');
+          if (prefInput) prefInput.value = resConfig.config.preferentialPaymentLinkUrl || '';
+          const promoInput = document.getElementById('stripePromoCodeInput');
+          if (promoInput) promoInput.value = resConfig.config.promoCode || 'FIDELITE40';
+          const nameView = document.getElementById('stripeProductNameView');
+          if (nameView) nameView.textContent = resConfig.config.productName || 'Assistance & Conciergerie Hajj Nusuk 2026';
+        }
+
+        const badge = document.getElementById('ledgerTotalBadge');
+        const container = document.getElementById('ledgerContainer');
+
+        if (badge) {
+          badge.textContent = `${resLedger.totalAmountEurFormatted || '0 €'} (${resLedger.totalPayments || 0} règlements)`;
+        }
+
+        if (container) {
+          if (!resLedger.ledger || resLedger.ledger.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center text-slate-400 italic">Aucun règlement consigné pour le moment.</div>';
+          } else {
+            container.innerHTML = resLedger.ledger.map(entry => {
+              const dt = new Date(entry.timestamp);
+              const dateStr = dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' ' + dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+              return `
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition flex items-center justify-between text-xs">
+                  <div>
+                    <div class="font-bold text-slate-900">${entry.nomComplet}</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5 font-medium">
+                      ${dateStr} • <span class="px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-mono text-[9px]">${entry.methode}</span> • Réf: <span class="font-mono text-slate-600">${entry.referenceInterne || ''}</span>
+                    </div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <span class="font-extrabold text-emerald-700 text-sm">+${entry.montantEur} €</span>
+                    <span class="block text-[9px] uppercase font-bold text-emerald-800">ENCAISSÉ</span>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error("Erreur chargement paramètres/ledger :", err);
+      }
+    }
+
+    function handleTarifChange() {
+      const type = document.getElementById('editTarifType').value;
+      const input = document.getElementById('editTarifMontant');
+      if (type === 'ANCIEN_CLIENT') {
+        input.value = 350;
+      } else if (type === 'STANDARD') {
+        input.value = 390;
+      }
+    }
+
+    async function saveStripeLink() {
+      const m1Url = (document.getElementById('stripeModule1Input')?.value || '').trim();
+      const m2Url = (document.getElementById('stripeModule2Input')?.value || '').trim();
+      const m3Url = (document.getElementById('stripeModule3Input')?.value || '').trim();
+      const standardUrl = (document.getElementById('stripePaymentLinkInput')?.value || '').trim();
+      const prefUrl = (document.getElementById('stripePrefPaymentLinkInput')?.value || '').trim();
+      const promoCode = (document.getElementById('stripePromoCodeInput')?.value || '').trim();
+
+      if (!standardUrl) {
+        alert("Veuillez renseigner au moins le lien de paiement Pack Complet (390 €).");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v1/stripe/config', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            module1PaymentLinkUrl: m1Url,
+            module2PaymentLinkUrl: m2Url,
+            module3PaymentLinkUrl: m3Url,
+            packCompletPaymentLinkUrl: standardUrl,
+            paymentLinkUrl: standardUrl,
+            preferentialPaymentLinkUrl: prefUrl,
+            promoCode: promoCode
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert("Grille tarifaire Stripe enregistrée avec succès !\n• Module 1 (Profil & Vérification) : 90 €\n• Module 2 (Recharge Wallet) : 140 €\n• Module 3 (Sprint Réservation) : 240 €\n• Pack Sérénité Complet : 390 € (Fidélité : 350 €)");
+          await renderSettingsView();
+        } else {
+          alert("Erreur : " + (data.error || "Échec de mise à jour"));
+        }
+      } catch (err) {
+        alert("Erreur réseau : " + err.message);
+      }
+    }
+
+    // 3. CHARGEMENT DES DONNÉES
+    async function loadData() {
+      try {
+        const [resPelerins, resSummary, resEvents, resAppointments] = await Promise.all([
+          fetch('/api/v1/pelerins'),
+          fetch('/api/v1/dashboard/summary'),
+          fetch('/api/v1/events/recent'),
+          fetch('/api/v1/appointments')
+        ]);
+
+        if (resPelerins.status === 401 || resSummary.status === 401) {
+          sessionStorage.removeItem('salamomra_logged_in');
+          document.getElementById('authModal').classList.remove('hidden');
+          return;
+        }
+
+        allPelerins = await resPelerins.json();
+        const summary = await resSummary.json();
+        const events = await resEvents.json();
+        allAppointments = await resAppointments.json();
+
+        if (summary) {
+          document.getElementById('kpi-total').textContent = summary.totalPelerinsInscrits;
+          document.getElementById('kpi-dossiers-count').textContent = summary.totalDossiers;
+          document.getElementById('badge-total-pelerins').textContent = summary.totalDossiers;
+          document.getElementById('kpi-prets').textContent = summary.totalDossiersPrets;
+          document.getElementById('kpi-actions').textContent = summary.totalActionsATraiter;
+          document.getElementById('kpi-bloques').textContent = summary.totalDossiersBloques;
+        }
+
+        try { renderOverviewTable(); } catch (e) { console.error("renderOverviewTable:", e); }
+        try { renderPelerinsTable(); } catch (e) { console.error("renderPelerinsTable:", e); }
+        try { renderAppointmentsView(); } catch (e) { console.error("renderAppointmentsView:", e); }
+        try { renderWalletsTable(); } catch (e) { console.error("renderWalletsTable:", e); }
+        try { renderPacksTable(); } catch (e) { console.error("renderPacksTable:", e); }
+        try { renderEvents(events); } catch (e) { console.error("renderEvents:", e); }
+        await loadTeam();
+        populatePelerinSelect();
+      } catch (err) {
+        console.error("Erreur de chargement :", err);
+      }
+    }
+
+    // UTILITAIRES DE PERSONNALISATION WHATSAPP ET EMAIL
+    function getPelerinDetails(p) {
+      let firstName = (p.firstName || '').trim();
+      let familyName = (p.familyName || '').trim();
+
+      if (!firstName && p.nomComplet) {
+        const parts = p.nomComplet.trim().split(/\s+/);
+        firstName = parts[0] || 'Cher Pèlerin';
+        familyName = parts.slice(1).join(' ') || '';
+      } else if (!firstName && p.fullName) {
+        const parts = p.fullName.trim().split(/\s+/);
+        firstName = parts[0] || 'Cher Pèlerin';
+        familyName = parts.slice(1).join(' ') || '';
+      }
+      
+      const fullName = familyName ? `${firstName} ${familyName}` : (firstName || 'Cher Pèlerin');
+
+      // Détection de l'ancienneté du client & tarif associé
+      const isAncien = Boolean(p.dejaClient || p.ancienClient || (p.tarifType === 'ANCIEN_CLIENT') || (p.tarifMontantEur === 350));
+      const montant = p.tarifMontantEur || (isAncien ? 350 : 390);
+      const tarif = `${montant} €`;
+      const conditionTarif = isAncien 
+        ? "350 € (tarif préférentiel fidélité réservé à nos anciens clients au lieu de 390 €)" 
+        : (montant !== 390 ? `${montant} € (tarif spécifique accordé)` : "390 € pour votre accompagnement complet");
+
+      const paymentLink = isAncien 
+        ? (stripeGlobalConfig?.preferentialPaymentLinkUrl || '')
+        : (stripeGlobalConfig?.paymentLinkUrl || '');
+
+      // Prénom du conseiller en charge du dossier
+      let advisorName = "Salah";
+      if (p.conseiller) {
+        const found = allTeamMembers.find(m => m.identifiant === p.conseiller || m.nom === p.conseiller);
+        if (found && found.prenom) {
+          advisorName = found.prenom;
+        } else if (p.conseiller.includes("Conseiller 1") || p.conseiller.toLowerCase().includes("salah")) {
+          advisorName = "Salah";
+        } else if (p.conseiller.includes("Conseiller 2") || p.conseiller.toLowerCase().includes("youssef")) {
+          advisorName = "Youssef";
+        } else {
+          advisorName = p.conseiller.trim().split(/\s+/)[0];
+        }
+      }
+
+      return { firstName, familyName, fullName, isAncien, tarif, conditionTarif, advisorName, paymentLink };
+    }
+
+    function getWhatsAppUrl(p) {
+      let rawPhone = (p.phone || p.telephone || '').replace(/[^0-9]/g, '');
+      if (rawPhone.startsWith('0')) {
+        rawPhone = '33' + rawPhone.slice(1);
+      }
+      const { fullName, advisorName, isAncien } = getPelerinDetails(p);
+      const packTarifTxt = isAncien ? "350 € (Tarif Fidélité Ancien Client)" : "390 €";
+
+      const msg = `Salam aleykoum ${fullName},
+
+J'espère que vous vous portez bien ainsi que vos proches.
+
+C'est ${advisorName} de l'équipe Salam Omra. Je fais suite à votre démarche d'inscription pour le Hajj 2026.
+
+Afin de vous accompagner pas à pas et sans stress sur la plateforme officielle Nusuk, nous proposons plusieurs formules adaptées à vos besoins :
+
+🔹 Étape 1 : Profil & Validation Nusuk (90 €)
+• Audit et conformité stricte de votre passeport et photo officielle.
+• Suivi jusqu'à la pastille verte "Vérifié" du Ministère saoudien (zéro rejet).
+
+🔹 Étape 2 : Recharge & Sécurité E-Wallet (140 €)
+• Déblocage des plafonds bancaires en France / Belgique.
+• Sécurisation de votre virement séquestre en Riyals (SAR) prêt avant les ventes.
+
+🔹 Étape 3 : Sprint Réservation Jour J (240 €)
+• Veille H24 et arbitrage des formules partenaires (Yusr Al Mashaer).
+• Assistance téléphonique d'urgence en direct pour sécuriser votre pack le jour de l'ouverture.
+
+⭐ Pack Sérénité Complète (Tout-en-un : ${packTarifTxt})
+• Accompagnement intégral regroupant les 3 étapes de A à Z avec votre conseiller dédié.
+
+🌐 Consultez le détail de nos services sur notre portail officiel :
+https://salam-omra-hajj.vercel.app
+
+Où en êtes-vous actuellement dans vos démarches sur Nusuk ? Auriez-vous un petit moment aujourd'hui ou demain pour faire un point ensemble ?
+
+Qu'Allah facilite votre noble intention.
+
+Bien fraternellement,
+${advisorName} — Salam Omra Assistance Hajj`;
+
+      return `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function getEmailUrl(p) {
+      const email = p.email || p.emailContact || '';
+      const { fullName, advisorName, isAncien } = getPelerinDetails(p);
+      const packTarifTxt = isAncien ? "350 € (Tarif Fidélité Ancien Client)" : "390 €";
+      const subject = `Salam Omra • Accompagnement Hajj Nusuk 2026 — Nos formules d'assistance, ${fullName}`;
+      
+      const body = `Salam aleykoum ${fullName},
+
+J'espère que vous et votre famille vous portez bien.
+
+Je suis ${advisorName} de l'équipe Salam Omra, et je suis ravi d'être votre conseiller dédié pour votre projet de pèlerinage au Hajj 2026.
+
+Suite à votre inscription, voici les différentes prestations que nous mettons à votre disposition pour sécuriser vos démarches sur la plateforme officielle Nusuk :
+
+1. Étape 1 : Profil & Validation Nusuk (90 €)
+• Audit technique de vos pièces d'identité (normes passeport et photo du Ministère).
+• Dépôt optimisé et suivi rigoureux jusqu'à l'approbation officielle en vert (sans rejet).
+
+2. Étape 2 : Recharge & Sécurité E-Wallet (140 €)
+• Anticipation et déblocage des plafonds bancaires (cartes et virements internationaux).
+• Sécurisation du versement sur le compte séquestre saoudien en Riyals (SAR).
+
+3. Étape 3 : Sprint Réservation Jour J (240 €)
+• Veille horaire active H24 lors de l'ouverture des ventes.
+• Arbitrage des formules auprès de nos prestataires saoudiens agréés (Yusr Al Mashaer).
+• Assistance téléphonique directe lors du rush des réservations.
+
+⭐ Formule Recommandée : Pack Sérénité Complète (${packTarifTxt})
+• Regroupe l'ensemble des 3 étapes avec votre conseiller dédié à vos côtés du premier jour jusqu'au départ.
+
+🌐 Retrouvez la présentation de nos engagements sur notre portail :
+https://salam-omra-hajj.vercel.app
+
+Avez-vous déjà pu créer votre compte officiel Nusuk ? Je reste à votre entière disposition par retour d'email ou par téléphone pour faire un premier point à votre convenance.
+
+Qu'Allah agrée votre démarche et vous accorde un Hajj béni.
+
+Bien fraternellement,
+
+${advisorName}
+Conseiller Conciergerie Hajj — Salam Omra`;
+
+      return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    // UTILITAIRES DE GESTION DES DATES DU FORMULAIRE ET ANCIENNETÉ
+    function getPelerinDate(p) {
+      const raw = p.createdAt || p.created_at || p.creeLe || p.dateInscription || p.date_inscription || p.dateFormulaire || p.dateEcriture || p.submissionDate || p.date || p.timestamp || p.horodatage || p.submittedAt;
+      if (!raw) return new Date(0);
+      const d = new Date(raw);
+      return isNaN(d.getTime()) ? new Date(0) : d;
+    }
+
+    function formatPelerinDate(p) {
+      const d = getPelerinDate(p);
+      if (d.getTime() === 0) {
+        return {
+          full: "Non renseignée",
+          short: "--/--",
+          time: "",
+          rel: "Date inconnue",
+          badgeClass: "bg-slate-100 text-slate-500",
+          isUrgentContact: false
+        };
+      }
+
+      const full = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const short = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+      const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      const diffMs = Date.now() - d.getTime();
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffHours / 24);
+
+      let rel = "";
+      let badgeClass = "";
+      let isUrgentContact = false;
+
+      if (diffDays >= 2) {
+        rel = `J+${diffDays} • À contacter en priorité`;
+        badgeClass = "bg-amber-100 text-amber-900 border border-amber-300 font-bold";
+        isUrgentContact = true;
+      } else if (diffDays === 1) {
+        rel = `Hier (${diffHours}h)`;
+        badgeClass = "bg-blue-50 text-blue-800 border border-blue-200 font-semibold";
+      } else if (diffHours >= 1) {
+        rel = `Il y a ${diffHours}h`;
+        badgeClass = "bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold";
+      } else {
+        rel = "À l'instant";
+        badgeClass = "bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold";
+      }
+
+      return { full, short, time, rel, badgeClass, isUrgentContact, timestamp: d.getTime() };
+    }
+
+    // UTILITAIRES DE SUIVI DES ÉCHANGES (WHATSAPP, EMAIL, APPEL, NOTES)
+    function getContactStatusBadge(p) {
+      if (p.dernierContact && p.dernierContact.date) {
+        const d = new Date(p.dernierContact.date);
+        const dateStr = isNaN(d.getTime()) ? '' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        const canal = (p.dernierContact.canal || 'WHATSAPP').toUpperCase();
+        const isWa = canal === 'WHATSAPP';
+        const isEmail = canal === 'EMAIL';
+        const badgeColor = isWa ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : (isEmail ? 'bg-sky-50 text-sky-800 border-sky-200' : 'bg-amber-50 text-amber-800 border-amber-200');
+        const icon = isWa ? '💬' : (isEmail ? '✉️' : '📝');
+        const canalLabel = isWa ? 'WhatsApp' : (isEmail ? 'Email' : canal);
+        return `
+          <div class="mt-1">
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold border ${badgeColor}" title="Dernier contact par ${p.dernierContact.auteur || 'Conseiller'}">
+              <span>${icon}</span>
+              <span>${canalLabel} • ${dateStr}</span>
+            </span>
+          </div>
+        `;
+      }
+      return `<div class="mt-1 text-[10px] text-slate-400 font-medium">⚪ Non contacté</div>`;
+    }
+
+    async function trackContact(pelerinId, canal, note = null) {
+      const p = allPelerins.find(item => item.id === pelerinId || item.referenceInterne === pelerinId);
+      const advisor = (p && p.conseiller) ? p.conseiller : 'Conseiller';
+      const nowIso = new Date().toISOString();
+
+      if (p) {
+        if (!Array.isArray(p.historiqueContacts)) p.historiqueContacts = [];
+        const optInteraction = {
+          id: 'temp-' + Date.now(),
+          canal: canal,
+          date: nowIso,
+          auteur: advisor,
+          note: note || (canal === 'WHATSAPP' ? "Message d'accompagnement envoyé via WhatsApp" : (canal === 'EMAIL' ? "Email de suivi envoyé" : "Contact client consigné"))
+        };
+        p.historiqueContacts.unshift(optInteraction);
+        p.dernierContact = {
+          canal: canal,
+          date: nowIso,
+          auteur: advisor,
+          note: optInteraction.note
+        };
+
+        // Mise à jour immédiate et fluide du DOM
+        renderPelerinsTable();
+        renderOverviewTable();
+        if (activeModalPelerin && (activeModalPelerin.id === pelerinId || activeModalPelerin.referenceInterne === pelerinId)) {
+          renderModalInteractions(p);
+        }
+      }
+
+      // Sauvegarde asynchrone sur le serveur
+      try {
+        const res = await fetch(`/api/v1/pelerins/${encodeURIComponent(pelerinId)}/interactions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({ canal, auteur: advisor, note })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (p && data.historiqueContacts) {
+            p.historiqueContacts = data.historiqueContacts;
+            p.dernierContact = data.dernierContact;
+            if (activeModalPelerin && (activeModalPelerin.id === p.id || activeModalPelerin.referenceInterne === p.id)) {
+              renderModalInteractions(p);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("[TRACK-CONTACT] Erreur enregistrement :", err);
+      }
+    }
+
+    function renderModalInteractions(p) {
+      const container = document.getElementById('modalInteractionsList');
+      const countBadge = document.getElementById('modalInteractionsCount');
+      const lastBadge = document.getElementById('modalLastContactBadge');
+      if (!container) return;
+
+      const interactions = Array.isArray(p.historiqueContacts) ? p.historiqueContacts : [];
+      if (countBadge) countBadge.textContent = `${interactions.length} échange(s)`;
+
+      if (lastBadge) {
+        if (p.dernierContact && p.dernierContact.date) {
+          const d = new Date(p.dernierContact.date);
+          const timeStr = isNaN(d.getTime()) ? '' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+          const isWa = p.dernierContact.canal === 'WHATSAPP';
+          lastBadge.className = `px-2 py-0.5 rounded-full text-[10px] font-bold ${isWa ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-sky-100 text-sky-800 border border-sky-300'}`;
+          lastBadge.textContent = `Dernier contact : ${p.dernierContact.canal} le ${timeStr} (${p.dernierContact.auteur || 'Conseiller'})`;
+          lastBadge.classList.remove('hidden');
+        } else {
+          lastBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500';
+          lastBadge.textContent = 'Non contacté pour le moment';
+          lastBadge.classList.remove('hidden');
+        }
+      }
+
+      if (interactions.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 text-center text-slate-400 bg-white rounded-xl border border-dashed border-slate-200">
+            Aucun échange consigné pour le moment.<br>
+            <span class="text-[11px] text-teal-600 font-medium">Cliquez sur WhatsApp ou Email pour tracer automatiquement votre premier message.</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = interactions.map(item => {
+        const d = new Date(item.date);
+        const dateStr = isNaN(d.getTime()) ? '' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        const isWa = item.canal === 'WHATSAPP';
+        const isEmail = item.canal === 'EMAIL';
+        const canalBg = isWa ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : (isEmail ? 'bg-sky-100 text-sky-800 border-sky-300' : 'bg-amber-100 text-amber-800 border-amber-300');
+        const icon = isWa ? '💬' : (isEmail ? '✉️' : '📝');
+
+        return `
+          <div class="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs flex items-start gap-2.5">
+            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${canalBg} mt-0.5 shrink-0">
+              ${icon} ${item.canal}
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <span class="font-bold text-slate-900 text-[11px] truncate">${item.note || 'Contact client'}</span>
+                <span class="text-[10px] text-slate-400 shrink-0 font-mono">${dateStr}</span>
+              </div>
+              <div class="text-[10px] text-slate-500 mt-0.5">
+                Consigné par <span class="font-semibold text-slate-700">${item.auteur || 'Conseiller'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function submitManualContactNote() {
+      if (!activeModalPelerin) return;
+      const input = document.getElementById('manualContactNote');
+      const note = input ? input.value.trim() : '';
+      if (!note) return;
+
+      input.value = '';
+      await trackContact(activeModalPelerin.id, 'NOTE', note);
+    }
+
+    // RENDU VUE D'ENSEMBLE
+    function renderOverviewTable() {
+      const tbody = document.getElementById('dossiersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let filtered = Array.isArray(allPelerins) ? allPelerins : [];
+      const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+
+      if (currentFilter === 'URGENTS') filtered = filtered.filter(p => p.urgent);
+      else if (currentFilter === 'MON_EQUIPE') filtered = filtered.filter(p => p.conseiller === 'Conseiller 1');
+
+      if (search) {
+        filtered = filtered.filter(p => 
+          (p.nomComplet || p.fullName || '').toLowerCase().includes(search) ||
+          (p.email || p.emailContact || '').toLowerCase().includes(search) ||
+          (p.phone || p.telephone || '').toLowerCase().includes(search)
+        );
+      }
+
+      // Par défaut, afficher les plus anciens dossiers pour traiter en priorité
+      const sortedOverview = [...filtered].sort((a, b) => getPelerinDate(a).getTime() - getPelerinDate(b).getTime());
+
+      if (sortedOverview.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
+              Aucun dossier ne correspond à ce filtre.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      sortedOverview.slice(0, 8).forEach(p => {
+        try {
+          const isVerified = p.nusuk?.verificationStatus === 'VERIFIE';
+          const badge = isVerified 
+            ? `<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">Vérifié</span>`
+            : (p.nusuk?.hasAccount ? `<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-semibold">En attente</span>` : `<span class="px-2 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200 font-semibold">Sans compte</span>`);
+
+          const actionBadge = p.urgent
+            ? `<span class="text-amber-700 font-bold">! ${p.actionAttendue || 'Action requise'}</span>`
+            : `<span class="text-emerald-700 font-bold">✓ ${p.actionAttendue || 'Dossier à jour'}</span>`;
+
+          const waUrl = getWhatsAppUrl(p);
+          const mailUrl = getEmailUrl(p);
+          const dateInfo = formatPelerinDate(p);
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition';
+          tr.innerHTML = `
+            <td class="py-2.5 px-3 cursor-pointer" onclick="openPelerinModal('${p.id}')">
+              <div class="font-bold text-slate-900">${p.nomComplet || p.fullName || 'Pèlerin'}</div>
+              <div class="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                <span class="font-mono text-slate-400">${p.referenceInterne || ''}</span>
+                <span>•</span>
+                <span>📅 ${dateInfo.short} ${dateInfo.time}</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[9px] ${dateInfo.badgeClass}">${dateInfo.rel}</span>
+              </div>
+              ${getContactStatusBadge(p)}
+            </td>
+            <td class="py-2.5 px-3"><span class="px-1.5 py-0.5 rounded bg-slate-100 font-bold text-slate-700">${p.peopleCount || 1}</span></td>
+            <td class="py-2.5 px-3">${badge}</td>
+            <td class="py-2.5 px-3">${actionBadge}</td>
+            <td class="py-2.5 px-3 text-slate-600">${p.conseiller || 'Non assigné'}</td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="inline-flex items-center gap-1.5">
+                <a href="${waUrl}" target="_blank" onclick="trackContact('${p.id}', 'WHATSAPP')" title="Envoyer WhatsApp" class="p-1 rounded bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white transition">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                </a>
+                <a href="${mailUrl}" onclick="trackContact('${p.id}', 'EMAIL')" title="Envoyer Email" class="p-1 rounded bg-sky-50 text-sky-600 hover:bg-sky-500 hover:text-white transition">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </a>
+              </div>
+            </td>
+            <td class="py-2.5 px-2 text-right">
+              <button onclick="openPelerinModal('${p.id}')" class="text-teal-600 font-bold hover:underline">Gérer</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        } catch (errRow) {
+          console.error("Erreur rendu pèlerin overview:", p?.id, errRow);
+        }
+      });
+    }
+
+    // RENDU ANNUAIRE PÈLERINS AVEC TRI PAR DATE DU FORMULAIRE
+    function renderPelerinsTable() {
+      const tbody = document.getElementById('fullPelerinsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const search = (document.getElementById('pelerinSearch')?.value || '').toLowerCase();
+      const filter = document.getElementById('pelerinFilter')?.value || 'ALL';
+      const sortBy = document.getElementById('pelerinSort')?.value || 'OLDEST';
+
+      let list = Array.isArray(allPelerins) ? [...allPelerins] : [];
+
+      // Filtrage
+      if (filter === 'VERIFIE') list = list.filter(p => p.nusuk?.verificationStatus === 'VERIFIE');
+      if (filter === 'NON_VERIFIE') list = list.filter(p => p.nusuk?.verificationStatus !== 'VERIFIE');
+      if (filter === 'SANS_COMPTE') list = list.filter(p => !p.nusuk?.hasAccount);
+      if (filter === 'FAMILLE') list = list.filter(p => (p.peopleCount || 1) > 1);
+
+      if (search) {
+        list = list.filter(p => 
+          (p.nomComplet || p.fullName || '').toLowerCase().includes(search) ||
+          (p.email || p.emailContact || '').toLowerCase().includes(search) ||
+          (p.phone || p.telephone || '').toLowerCase().includes(search) ||
+          (p.nationality || '').toLowerCase().includes(search)
+        );
+      }
+
+      // Tri selon le choix de l'utilisateur (par défaut : plus anciens d'abord)
+      if (sortBy === 'OLDEST') {
+        list.sort((a, b) => getPelerinDate(a).getTime() - getPelerinDate(b).getTime());
+      } else if (sortBy === 'NEWEST') {
+        list.sort((a, b) => getPelerinDate(b).getTime() - getPelerinDate(a).getTime());
+      } else if (sortBy === 'NAME') {
+        list.sort((a, b) => (a.nomComplet || a.fullName || '').localeCompare(b.nomComplet || b.fullName || ''));
+      } else if (sortBy === 'URGENT') {
+        list.sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0));
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="11" class="py-12 text-center text-slate-400">
+              <div class="flex flex-col items-center justify-center gap-2">
+                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                <span class="font-medium text-xs">Aucun pèlerin ne correspond aux critères de recherche.</span>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      list.forEach(p => {
+        try {
+          const isVerified = p.nusuk?.verificationStatus === 'VERIFIE';
+          const statusBadge = isVerified 
+            ? `<span class="px-2 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">VÉRIFIÉ</span>`
+            : (p.nusuk?.hasAccount ? `<span class="px-2 py-1 rounded-md bg-amber-100 text-amber-800 font-semibold text-[11px]">EN ATTENTE</span>` : `<span class="px-2 py-1 rounded-md bg-rose-100 text-rose-800 font-semibold text-[11px]">NON CRÉÉ</span>`);
+
+          const isAncien = Boolean(p.dejaClient || p.ancienClient || (p.tarifType === 'ANCIEN_CLIENT') || (p.tarifMontantEur === 350));
+          const montantDossier = p.tarifMontantEur || (isAncien ? 350 : 390);
+
+          let paymentBadge = '';
+          if (p.statutPaiement === 'PAYE') {
+            paymentBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">✓ Payé (${p.montantPaye || montantDossier} €)</span>`;
+          } else if (isAncien) {
+            paymentBadge = `<span class="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-bold">Fidélité 350 €</span>`;
+          } else {
+            paymentBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-semibold">Attente ${montantDossier} €</span>`;
+          }
+
+          const waUrl = getWhatsAppUrl(p);
+          const mailUrl = getEmailUrl(p);
+          const dateInfo = formatPelerinDate(p);
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition';
+          tr.innerHTML = `
+            <td class="py-3 px-3">
+              <div class="font-bold text-slate-900">${dateInfo.short} <span class="text-slate-500 font-normal text-[11px]">${dateInfo.time}</span></div>
+              <div class="mt-0.5">
+                <span class="inline-block px-2 py-0.5 rounded-full text-[10px] ${dateInfo.badgeClass}">
+                  ${dateInfo.rel}
+                </span>
+              </div>
+            </td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-slate-900">${p.nomComplet || p.fullName || 'Pèlerin'}</div>
+              <div class="text-[10px] text-slate-400 font-mono">${p.referenceInterne || ''}</div>
+            </td>
+            <td class="py-3 px-3 text-slate-700">${p.nationality || '-'}</td>
+            <td class="py-3 px-3">
+              <div class="text-slate-900 font-medium">${p.phone || p.telephone || '-'}</div>
+              <div class="text-slate-400 text-[11px]">${p.email || p.emailContact || '-'}</div>
+              ${getContactStatusBadge(p)}
+            </td>
+            <td class="py-3 px-3 text-center">
+              <div class="inline-flex items-center gap-2">
+                <a href="${waUrl}" target="_blank" onclick="trackContact('${p.id}', 'WHATSAPP')" title="Contacter sur WhatsApp" 
+                   class="px-2 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] flex items-center gap-1 shadow-sm transition">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                  WhatsApp
+                </a>
+                <a href="${mailUrl}" onclick="trackContact('${p.id}', 'EMAIL')" title="Envoyer un Email" 
+                   class="px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-[11px] flex items-center gap-1 shadow-sm transition">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  Email
+                </a>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200 font-bold">${p.peopleCount || 1} pers.</span>
+            </td>
+            <td class="py-3 px-3 font-semibold ${p.nusuk?.hasAccount ? 'text-emerald-700' : 'text-slate-400'}">
+              ${p.nusuk?.hasAccount ? '✓ Oui' : '✗ Non'}
+            </td>
+            <td class="py-3 px-3">${statusBadge}</td>
+            <td class="py-3 px-3">${paymentBadge}</td>
+            <td class="py-3 px-3 text-slate-600">${p.conseiller || 'Non assigné'}</td>
+            <td class="py-3 px-2 text-right">
+              <button onclick="openPelerinModal('${p.id}')" 
+                      class="px-3 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-bold text-[11px] shadow-sm transition">
+                Modifier
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        } catch (errRow) {
+          console.error("Erreur rendu pèlerin full table:", p?.id, errRow);
+        }
+      });
+    }
+
+    // GESTION MODAL DÉTAIL & MODIFICATION DE STATUT
+    function openPelerinModal(target) {
+      const p = (typeof target === 'string') 
+        ? allPelerins.find(item => item.id === target || item.referenceInterne === target) 
+        : target;
+      if (!p) return;
+      activeModalPelerin = p;
+      document.getElementById('editPelerinId').value = p.id;
+      document.getElementById('modalInitial').textContent = (p.firstName || p.nomComplet || 'P').charAt(0).toUpperCase();
+      document.getElementById('modalFullName').textContent = p.fullName || p.nomComplet;
+      document.getElementById('modalRef').textContent = p.referenceInterne || p.id;
+
+      // Affichage de la date d'écriture du formulaire
+      const dateInfo = formatPelerinDate(p);
+      const modalDateBadge = document.getElementById('modalDateBadge');
+      if (modalDateBadge) {
+        modalDateBadge.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold ${dateInfo.badgeClass}`;
+        modalDateBadge.textContent = `Inscrit le ${dateInfo.full} (${dateInfo.rel})`;
+      }
+
+      document.getElementById('modalPhone').textContent = p.phone || p.telephone;
+      document.getElementById('modalEmail').textContent = p.email || p.emailContact;
+      document.getElementById('modalNat').textContent = `${p.nationality} • ${p.address || ''}`;
+      document.getElementById('modalPeople').textContent = `${p.peopleCount || 1} personne(s)`;
+      document.getElementById('modalSlot').textContent = p.availabilitySlots || 'Non précisé';
+
+      // Remplir les champs d'édition
+      document.getElementById('editNusukStatus').value = p.nusuk?.verificationStatus || 'NON_VERIFIE';
+      document.getElementById('editEtape').value = p.etape || 'Inscription';
+      document.getElementById('editActionAttendue').value = p.actionAttendue || '';
+      document.getElementById('editConseiller').value = p.conseiller || 'Conseiller 1';
+      document.getElementById('editAdminNotes').value = p.adminNotes || '';
+      
+      const isAncienClient = Boolean(p.dejaClient || p.ancienClient || (p.tarifType === 'ANCIEN_CLIENT') || (p.tarifMontantEur === 350));
+      document.getElementById('editTarifType').value = p.tarifType || (isAncienClient ? 'ANCIEN_CLIENT' : 'STANDARD');
+      document.getElementById('editTarifMontant').value = p.tarifMontantEur || (isAncienClient ? 350 : 390);
+
+      document.getElementById('editStatutPaiement').value = p.statutPaiement || 'EN_ATTENTE';
+      document.getElementById('editRefPaiement').value = p.referencePaiement || p.stripeSessionId || '';
+
+      // Mettre à jour les liens d'action directs et traçage
+      document.getElementById('modalWhatsappBtn').href = getWhatsAppUrl(p);
+      document.getElementById('modalWhatsappBtn').onclick = () => trackContact(p.id, 'WHATSAPP');
+      document.getElementById('modalEmailBtn').href = getEmailUrl(p);
+      document.getElementById('modalEmailBtn').onclick = () => trackContact(p.id, 'EMAIL');
+
+      // Affichage dynamique du journal des échanges
+      renderModalInteractions(p);
+
+      // Mise à jour du prix du pack complet selon fidélité
+      const isAncien = Boolean(p.dejaClient || p.ancienClient || (p.tarifType === 'ANCIEN_CLIENT') || (p.tarifMontantEur === 350));
+      const packPriceBadge = document.getElementById('modalPackCompletPrice');
+      if (packPriceBadge) {
+        packPriceBadge.textContent = isAncien ? '350 € (Fidélité)' : '390 €';
+      }
+
+      document.getElementById('pelerinDetailModal').classList.remove('hidden');
+    }
+
+    function closePelerinModal() {
+      document.getElementById('pelerinDetailModal').classList.add('hidden');
+      activeModalPelerin = null;
+    }
+
+    // GESTION DES SERVICES MODULAIRES & LIENS STRIPE
+    function getServiceConfig(serviceKey, p) {
+      const isAncien = Boolean(p?.dejaClient || p?.ancienClient || (p?.tarifType === 'ANCIEN_CLIENT') || (p?.tarifMontantEur === 350));
+      if (serviceKey === 'module1') {
+        return {
+          title: "Étape 1 : Starter Profil & Vérification Nusuk",
+          price: "90,00 €",
+          url: stripeGlobalConfig?.module1PaymentLinkUrl || '',
+          desc: "Audit de conformité passeport/photos et suivi jusqu'à validation officielle en vert sur Nusuk"
+        };
+      }
+      if (serviceKey === 'module2') {
+        return {
+          title: "Étape 2 : Recharge & Sécurité E-Wallet",
+          price: "140,00 €",
+          url: stripeGlobalConfig?.module2PaymentLinkUrl || '',
+          desc: "Déblocage plafonds bancaires et sécurisation du virement séquestre en Riyals (SAR)"
+        };
+      }
+      if (serviceKey === 'module3') {
+        return {
+          title: "Étape 3 : Sprint Réservation Jour J",
+          price: "240,00 €",
+          url: stripeGlobalConfig?.module3PaymentLinkUrl || '',
+          desc: "Veille forfaits Yusr Al Mashaer et assistance d'urgence lors du rush d'ouverture des ventes"
+        };
+      }
+      // Pack Sérénité Complet
+      return {
+        title: "👑 Pack Sérénité Complète (Tout-en-un)",
+        price: isAncien ? "350,00 € (Tarif Fidélité)" : "390,00 €",
+        url: isAncien ? (stripeGlobalConfig?.preferentialPaymentLinkUrl || '') : (stripeGlobalConfig?.packCompletPaymentLinkUrl || stripeGlobalConfig?.paymentLinkUrl || ''),
+        desc: "Accompagnement intégral de A à Z (Vérification + Wallet + Réservation avec conseiller dédié)"
+      };
+    }
+
+    function copyServiceLink(serviceKey) {
+      if (!activeModalPelerin) return;
+      const s = getServiceConfig(serviceKey, activeModalPelerin);
+      if (!s.url) {
+        alert("Lien Stripe non configuré pour ce service dans l'onglet Paramètres.");
+        return;
+      }
+      navigator.clipboard.writeText(s.url).then(() => {
+        alert(`✅ Lien Stripe copié dans votre presse-papier !\n\n• Service : ${s.title}\n• Montant : ${s.price}\n• Lien : ${s.url}\n\nVous pouvez le coller directement dans votre discussion.`);
+      }).catch(() => {
+        prompt("Copiez ce lien Stripe :", s.url);
+      });
+    }
+
+    function sendServiceWhatsApp(serviceKey) {
+      if (!activeModalPelerin) return;
+      const p = activeModalPelerin;
+      const { fullName, advisorName } = getPelerinDetails(p);
+      const s = getServiceConfig(serviceKey, p);
+
+      let rawPhone = (p.phone || p.telephone || '').replace(/[^0-9]/g, '');
+      if (rawPhone.startsWith('0')) rawPhone = '33' + rawPhone.slice(1);
+
+      const msg = `Salam aleykoum ${fullName},
+
+C'est ${advisorName} de l'équipe Salam Omra.
+
+Suite à notre échange concernant votre accompagnement pour le Hajj 2026, voici le lien officiel sécurisé pour votre démarche :
+
+📌 ${s.title} (${s.price})
+Prestation : ${s.desc}.
+
+🔗 Lien de règlement Stripe sécurisé :
+${s.url}
+
+🌐 Retrouvez également toutes les informations sur notre portail officiel :
+https://salam-omra-hajj.vercel.app
+
+Dès votre règlement confirmé, nous enclenchons immédiatement cette étape sur votre dossier.
+
+Bien fraternellement,
+${advisorName} — Salam Omra Assistance Hajj`;
+
+      trackContact(p.id, 'WHATSAPP', `Proposition ${s.title} (${s.price})`);
+      window.open(`https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // SAUVEGARDE DE LA MODIFICATION DE STATUT DU PÈLERIN
+    async function savePelerinStatus(e) {
+      e.preventDefault();
+      const pelerinId = document.getElementById('editPelerinId').value;
+      const saveBtn = document.getElementById('saveStatusBtn');
+
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span>Enregistrement...</span>';
+
+      const tarifMontant = Number(document.getElementById('editTarifMontant').value) || 390;
+      const payload = {
+        nusukVerificationStatus: document.getElementById('editNusukStatus').value,
+        etape: document.getElementById('editEtape').value,
+        actionAttendue: document.getElementById('editActionAttendue').value,
+        conseiller: document.getElementById('editConseiller').value,
+        adminNotes: document.getElementById('editAdminNotes').value,
+        tarifType: document.getElementById('editTarifType').value,
+        tarifMontantEur: tarifMontant,
+        statutPaiement: document.getElementById('editStatutPaiement').value,
+        referencePaiement: document.getElementById('editRefPaiement').value,
+        montantPaye: tarifMontant,
+        urgent: document.getElementById('editNusukStatus').value !== 'VERIFIE'
+      };
+
+      try {
+        const res = await fetch(`/api/v1/pelerins/${pelerinId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("Statut du pèlerin mis à jour avec succès !");
+          closePelerinModal();
+          await loadData();
+        } else {
+          alert("Erreur : " + (data.error || "Échec de mise à jour"));
+        }
+      } catch (err) {
+        alert("Erreur réseau : " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> <span>Enregistrer les modifications</span>';
+      }
+    }
+
+    // 4. GESTION DE L'AGENDA RDV TÉLÉPHONIQUES
+    function populatePelerinSelect() {
+      const select = document.getElementById('rdvPelerinSelect');
+      if (!select) return;
+      select.innerHTML = '<option value="">-- Choisir un pèlerin --</option>';
+
+      allPelerins.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.nomComplet} (${p.phone}) - Dispo: ${p.availabilitySlots || 'Non précisé'}`;
+        opt.dataset.phone = p.phone || p.telephone;
+        opt.dataset.name = p.nomComplet;
+        select.appendChild(opt);
+      });
+    }
+
+    function autoFillRdvPhone() {
+      const select = document.getElementById('rdvPelerinSelect');
+      const selected = select.options[select.selectedIndex];
+      if (selected && selected.dataset.phone) {
+        document.getElementById('rdvPhone').value = selected.dataset.phone;
+      }
+    }
+
+    function scheduleRdvForCurrentPelerin() {
+      if (!activeModalPelerin) return;
+      closePelerinModal();
+      switchTab('agenda');
+      
+      const select = document.getElementById('rdvPelerinSelect');
+      select.value = activeModalPelerin.id;
+      document.getElementById('rdvPhone').value = activeModalPelerin.phone || activeModalPelerin.telephone;
+      document.getElementById('rdvSubject').value = `Point d'assistance Nusuk avec ${activeModalPelerin.nomComplet}`;
+      
+      // Mettre la date à demain 18h30 par défaut
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('rdvDate').value = tomorrow.toISOString().slice(0, 10);
+      document.getElementById('rdvTime').value = "18:30";
+    }
+
+    async function handleCreateRdv(e) {
+      e.preventDefault();
+      const select = document.getElementById('rdvPelerinSelect');
+      const selected = select.options[select.selectedIndex];
+      
+      const payload = {
+        pelerinId: select.value,
+        pelerinNom: selected.dataset.name || "Pèlerin",
+        phone: document.getElementById('rdvPhone').value,
+        dateHeure: `${document.getElementById('rdvDate').value}T${document.getElementById('rdvTime').value}`,
+        sujet: document.getElementById('rdvSubject').value,
+        conseiller: document.getElementById('rdvAdvisor').value
+      };
+
+      try {
+        const res = await fetch('/api/v1/appointments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("Rendez-vous téléphonique enregistré !");
+          e.target.reset();
+          await loadData();
+        } else {
+          alert("Erreur : " + data.error);
+        }
+      } catch (err) {
+        alert("Erreur : " + err.message);
+      }
+    }
+
+    async function deleteRdv(id) {
+      if (!confirm("Voulez-vous marquer ce rendez-vous comme terminé / le supprimer ?")) return;
+      try {
+        await fetch(`/api/v1/appointments/${id}`, { method: 'DELETE' });
+        await loadData();
+      } catch (err) {
+        alert("Erreur : " + err.message);
+      }
+    }
+
+    function renderAppointmentsView() {
+      const list = document.getElementById('appointmentsList');
+      const badge = document.getElementById('badge-total-rdv');
+      const countBadge = document.getElementById('rdvCountBadge');
+      if (!list) return;
+
+      if (badge) badge.textContent = allAppointments.length;
+      if (countBadge) countBadge.textContent = `${allAppointments.length} RDV`;
+
+      list.innerHTML = '';
+
+      if (allAppointments.length === 0) {
+        list.innerHTML = `<div class="p-8 text-center text-slate-400 italic text-xs">Aucun rendez-vous téléphonique planifié pour le moment.</div>`;
+        return;
+      }
+
+      allAppointments.forEach(rdv => {
+        const dt = new Date(rdv.dateHeure);
+        const dateFormatted = dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+        const timeFormatted = dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+        const rawPhone = (rdv.phone || '').replace(/[^0-9]/g, '');
+        const waLink = `https://wa.me/${rawPhone.startsWith('0') ? '33' + rawPhone.slice(1) : rawPhone}?text=${encodeURIComponent(`Bonjour ${rdv.pelerinNom}, nous avons rendez-vous téléphonique aujourd'hui pour votre dossier Hajj Nusuk.`)}`;
+
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs";
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="px-3 py-2 rounded-xl bg-amber-100 text-amber-900 font-extrabold text-center shrink-0">
+              <span class="block text-[10px] uppercase font-semibold text-amber-800">${dateFormatted}</span>
+              <span class="text-sm font-mono">${timeFormatted}</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-sm">${rdv.pelerinNom}</h4>
+              <p class="text-slate-600 text-[11px] mt-0.5">${rdv.sujet}</p>
+              <span class="inline-flex items-center gap-1 text-[10px] text-teal-700 font-semibold mt-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span> ${rdv.conseiller} • ${rdv.phone}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 self-end sm:self-center">
+            <a href="tel:${rdv.phone}" class="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-bold flex items-center gap-1 shadow-sm transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <span>Appeler</span>
+            </a>
+
+            <a href="${waLink}" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold flex items-center gap-1 shadow-sm transition">
+              <span>WhatsApp</span>
+            </a>
+
+            <button onclick="deleteRdv('${rdv.id}')" title="Terminé" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    // AUTRES TABLES (Wallets, Packs, Events)
+    function renderWalletsTable() {
+      const tbody = document.getElementById('walletsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      allPelerins.forEach(p => {
+        const pers = p.peopleCount || 1;
+        const estimationSAR = pers * 32000;
+        const isVerified = p.nusuk?.verificationStatus === 'VERIFIE';
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-bold text-slate-900">${p.nomComplet}</td>
+          <td class="py-3 px-3">${pers}</td>
+          <td class="py-3 px-3 font-mono font-bold text-teal-800">~${estimationSAR.toLocaleString()} SAR</td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded-full ${isVerified ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'} font-semibold">
+              ${isVerified ? 'Compte validé' : 'Solde à approvisionner'}
+            </span>
+          </td>
+          <td class="py-3 px-3 text-slate-500">29/10/2026</td>
+          <td class="py-3 px-3 text-emerald-700 font-semibold">✓ Banque prévenue</td>
+          <td class="py-3 px-2 text-right text-teal-600 font-bold hover:underline cursor-pointer" onclick='openPelerinModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Gérer</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderPacksTable() {
+      const tbody = document.getElementById('packsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      allPelerins.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-bold text-slate-900">${p.nomComplet}</td>
+          <td class="py-3 px-3 text-amber-800 font-bold">${p.provider || 'Yusr Al Mashaer'}</td>
+          <td class="py-3 px-3 font-semibold text-slate-800">Pack Premium Shifting Mina (4★)</td>
+          <td class="py-3 px-3 text-slate-500">Pack Confort Non-Shifting (3★)</td>
+          <td class="py-3 px-3 font-mono text-slate-800">35 000 SAR / pers</td>
+          <td class="py-3 px-3"><span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">Validé</span></td>
+          <td class="py-3 px-2 text-right text-teal-600 font-bold hover:underline cursor-pointer" onclick='openPelerinModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Modifier</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEvents(events) {
+      const el = document.getElementById('recentEventsList');
+      const inbox = document.getElementById('messagesInboxList');
+      if (!el) return;
+      el.innerHTML = '';
+      if (inbox) inbox.innerHTML = '';
+
+      events.forEach(e => {
+        el.innerHTML += `
+          <div class="relative">
+            <span class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-white flex items-center justify-center"></span>
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="text-xs font-bold text-slate-800">${e.titre}</h4>
+                <p class="text-[11px] text-slate-500">${e.description}</p>
+              </div>
+              <div class="text-[11px] text-slate-400 text-right">${e.horodatageRelatif}</div>
+            </div>
+          </div>
+        `;
+
+        if (inbox) {
+          inbox.innerHTML += `
+            <div class="p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <div>
+                  <h4 class="font-bold text-slate-900">${e.titre}</h4>
+                  <p class="text-slate-500 text-[11px] mt-0.5">${e.description} • Expéditeur vérifié : noreply@nusuk.sa</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400 text-[11px] block">${e.horodatageRelatif}</span>
+                <span class="text-emerald-700 font-bold text-[10px] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">OTP expurgé</span>
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
+
+    // ========================================================
+    // GESTION DYNAMIQUE DE L'ÉQUIPE (CRUD & RÉPARTITION DOSSIERS)
+    // ========================================================
+    let deletingMemberId = null;
+
+    async function loadTeam() {
+      try {
+        const res = await fetch('/api/v1/team');
+        if (res.ok) {
+          allTeamMembers = await res.json();
+          renderTeamView();
+          updateAdvisorSelects();
+        }
+      } catch (err) {
+        console.error("Erreur de chargement de l'équipe :", err);
+      }
+    }
+
+    function updateAdvisorSelects() {
+      const editSel = document.getElementById('editConseiller');
+      const rdvSel = document.getElementById('rdvAdvisor');
+
+      if (editSel) {
+        const currentVal = editSel.value;
+        editSel.innerHTML = allTeamMembers.map(m => `
+          <option value="${m.identifiant}">${m.identifiant} (${m.nom})</option>
+        `).join('');
+        if (currentVal && allTeamMembers.some(m => m.identifiant === currentVal)) {
+          editSel.value = currentVal;
+        }
+      }
+
+      if (rdvSel) {
+        const currentVal = rdvSel.value;
+        rdvSel.innerHTML = allTeamMembers.map(m => `
+          <option value="${m.identifiant}">${m.identifiant} (${m.nom})</option>
+        `).join('');
+        if (currentVal && allTeamMembers.some(m => m.identifiant === currentVal)) {
+          rdvSel.value = currentVal;
+        }
+      }
+    }
+
+    function renderTeamView() {
+      const container = document.getElementById('teamCardsContainer');
+      const statTotal = document.getElementById('statTeamTotal');
+      const statDossiers = document.getElementById('statTeamDossiers');
+      const statMoyenne = document.getElementById('statTeamMoyenne');
+      const badgeCount = document.getElementById('teamBadgeCount');
+
+      const totalDossiers = allPelerins.length;
+      const totalMembers = allTeamMembers.length;
+      const moyenne = totalMembers > 0 ? Math.round(totalDossiers / totalMembers) : 0;
+
+      if (statTotal) statTotal.textContent = `${totalMembers} conseillers`;
+      if (badgeCount) badgeCount.textContent = `${totalMembers} conseillers actifs`;
+      if (statDossiers) statDossiers.textContent = `${totalDossiers} dossiers`;
+      if (statMoyenne) statMoyenne.textContent = `${moyenne} dos./cons.`;
+
+      if (!container) return;
+
+      if (totalMembers === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-400 col-span-full">
+            Aucun membre dans l'équipe pour le moment. Cliquez sur "+ Ajouter un conseiller".
+          </div>
+        `;
+        return;
+      }
+
+      const colors = [
+        { bg: 'bg-teal-100', text: 'text-teal-800', bar: 'bg-teal-600' },
+        { bg: 'bg-blue-100', text: 'text-blue-800', bar: 'bg-blue-600' },
+        { bg: 'bg-amber-100', text: 'text-amber-900', bar: 'bg-amber-500' },
+        { bg: 'bg-purple-100', text: 'text-purple-900', bar: 'bg-purple-600' },
+        { bg: 'bg-emerald-100', text: 'text-emerald-900', bar: 'bg-emerald-600' }
+      ];
+
+      container.innerHTML = allTeamMembers.map((m, idx) => {
+        const col = colors[idx % colors.length];
+        const initial = (m.prenom || m.nom || 'C').charAt(0).toUpperCase();
+        const pct = totalDossiers > 0 ? Math.round((m.dossiersCount / totalDossiers) * 100) : 0;
+
+        let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px]">🟢 Disponible</span>`;
+        if (m.statut === 'OCCUPE') {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[11px]">🟡 Occupé</span>`;
+        } else if (m.statut === 'EN_CONGE') {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 font-bold text-[11px]">🏖️ En congé</span>`;
+        } else if (m.statut === 'INACTIF') {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold text-[11px]">⚪ Inactif</span>`;
+        }
+
+        return `
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 hover:shadow-md transition space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-2xl ${col.bg} ${col.text} font-extrabold flex items-center justify-center text-base shadow-sm shrink-0">
+                    ${initial}
+                  </div>
+                  <div>
+                    <span class="inline-block px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] font-bold text-slate-700 mb-0.5">${m.identifiant}</span>
+                    <h4 class="font-bold text-sm text-slate-900 leading-snug">${m.nom}</h4>
+                    <p class="text-xs text-slate-500">${m.role || 'Conseiller Conciergerie'}</p>
+                  </div>
+                </div>
+                ${statusBadge}
+              </div>
+
+              <!-- Jauge de charge dossiers -->
+              <div class="p-3 bg-white rounded-xl border border-slate-200/80 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-medium">Dossiers attribués :</span>
+                  <span class="font-extrabold text-slate-900 text-sm">${m.dossiersCount} <span class="text-xs font-normal text-slate-500">(${pct}%)</span></span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div class="${col.bar} h-full rounded-full transition-all duration-500" style="width: ${Math.min(100, Math.max(5, pct))}%"></div>
+                </div>
+                ${m.urgentsCount > 0 ? `
+                  <div class="text-[11px] text-amber-800 font-bold flex items-center gap-1">
+                    <span>⚠️</span> ${m.urgentsCount} action(s) urgente(s) à traiter
+                  </div>
+                ` : `
+                  <div class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                    <span>✓</span> Aucun blocage urgent
+                  </div>
+                `}
+              </div>
+
+              <!-- Coordonnées & Sync -->
+              <div class="text-xs text-slate-600 space-y-1">
+                ${m.email ? `<div class="flex justify-between items-center"><span class="text-slate-400">Email :</span><span class="font-medium text-slate-700 truncate max-w-[180px]">${m.email}</span></div>` : ''}
+                ${m.telephone ? `<div class="flex justify-between items-center"><span class="text-slate-400">Tél :</span><span class="font-medium text-slate-700">${m.telephone}</span></div>` : ''}
+                <div class="flex justify-between items-center"><span class="text-slate-400">Boîte sync :</span><span class="font-medium text-slate-700 truncate max-w-[180px]">${m.boiteSync || 'Gmail API'}</span></div>
+              </div>
+            </div>
+
+            <!-- Boutons d'action Modifier / Supprimer -->
+            <div class="pt-3 border-t border-slate-200/60 flex items-center justify-end gap-2">
+              <button onclick="editTeamMember('${m.id}')" 
+                      class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs shadow-sm transition flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                <span>Modifier</span>
+              </button>
+
+              <button onclick="openDeleteTeamModal('${m.id}')" 
+                      title="Supprimer ce conseiller et réassigner ses dossiers"
+                      class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs transition flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <span>Supprimer</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddTeamMemberModal() {
+      document.getElementById('teamModalTitle').textContent = "Ajouter un conseiller";
+      document.getElementById('teamMemberId').value = "";
+      const nextNum = allTeamMembers.length + 1;
+      document.getElementById('teamIdentifiant').value = `Conseiller ${nextNum}`;
+      document.getElementById('teamNom').value = "";
+      document.getElementById('teamPrenom').value = "";
+      document.getElementById('teamRole').value = "Conseiller Hajj & Assistance Nusuk";
+      document.getElementById('teamEmail').value = "";
+      document.getElementById('teamTelephone').value = "";
+      document.getElementById('teamStatut').value = "DISPONIBLE";
+      document.getElementById('teamBoiteSync').value = "Gmail API (Pub/Sub)";
+      document.getElementById('teamMemberModal').classList.remove('hidden');
+    }
+
+    function editTeamMember(id) {
+      const member = allTeamMembers.find(m => m.id === id);
+      if (!member) return;
+
+      document.getElementById('teamModalTitle').textContent = `Modifier ${member.identifiant}`;
+      document.getElementById('teamMemberId').value = member.id;
+      document.getElementById('teamIdentifiant').value = member.identifiant || "";
+      document.getElementById('teamNom').value = member.nom || "";
+      document.getElementById('teamPrenom').value = member.prenom || "";
+      document.getElementById('teamRole').value = member.role || "";
+      document.getElementById('teamEmail').value = member.email || "";
+      document.getElementById('teamTelephone').value = member.telephone || "";
+      document.getElementById('teamStatut').value = member.statut || "DISPONIBLE";
+      document.getElementById('teamBoiteSync').value = member.boiteSync || "Gmail API (Pub/Sub)";
+      document.getElementById('teamMemberModal').classList.remove('hidden');
+    }
+
+    function closeTeamMemberModal() {
+      document.getElementById('teamMemberModal').classList.add('hidden');
+    }
+
+    async function saveTeamMember(e) {
+      e.preventDefault();
+      const id = document.getElementById('teamMemberId').value;
+      const isEdit = Boolean(id);
+      const url = isEdit ? `/api/v1/team/${id}` : '/api/v1/team';
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const payload = {
+        identifiant: document.getElementById('teamIdentifiant').value.trim(),
+        nom: document.getElementById('teamNom').value.trim(),
+        prenom: document.getElementById('teamPrenom').value.trim(),
+        role: document.getElementById('teamRole').value.trim(),
+        email: document.getElementById('teamEmail').value.trim(),
+        telephone: document.getElementById('teamTelephone').value.trim(),
+        statut: document.getElementById('teamStatut').value,
+        boiteSync: document.getElementById('teamBoiteSync').value.trim()
+      };
+
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok) {
+          closeTeamMemberModal();
+          await loadTeam();
+          await loadData();
+          alert(data.message || "Enregistrement réussi.");
+        } else {
+          alert("Erreur : " + (data.error || "Échec de sauvegarde."));
+        }
+      } catch (err) {
+        alert("Erreur réseau : " + err.message);
+      }
+    }
+
+    function openDeleteTeamModal(id) {
+      const member = allTeamMembers.find(m => m.id === id);
+      if (!member) return;
+
+      deletingMemberId = id;
+      const confirmText = document.getElementById('deleteTeamConfirmText');
+      confirmText.textContent = `Vous êtes sur le point de supprimer ${member.identifiant} (${member.nom}), qui gère actuellement ${member.dossiersCount} dossier(s).`;
+
+      const otherMembers = allTeamMembers.filter(m => m.id !== id);
+      const sel = document.getElementById('reassignAdvisorSelect');
+      if (otherMembers.length === 0) {
+        sel.innerHTML = `<option value="Non affecté">Aucun autre membre (Laisser non affecté)</option>`;
+      } else {
+        sel.innerHTML = otherMembers.map(m => `
+          <option value="${m.identifiant}">${m.identifiant} (${m.nom}) • ${m.dossiersCount} dossiers actuels</option>
+        `).join('');
+      }
+
+      document.getElementById('deleteTeamModal').classList.remove('hidden');
+    }
+
+    function closeDeleteTeamModal() {
+      document.getElementById('deleteTeamModal').classList.add('hidden');
+      deletingMemberId = null;
+    }
+
+    async function confirmDeleteTeamMember() {
+      if (!deletingMemberId) return;
+      const reassignTo = document.getElementById('reassignAdvisorSelect').value;
+
+      try {
+        const res = await fetch(`/api/v1/team/${deletingMemberId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reassignTo })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          closeDeleteTeamModal();
+          await loadTeam();
+          await loadData();
+          alert(data.message || "Membre supprimé avec succès.");
+        } else {
+          alert("Erreur : " + (data.error || "Échec de la suppression."));
+        }
+      } catch (err) {
+        alert("Erreur réseau : " + err.message);
+      }
+    }
+
+    async function repartirDossiersEquitablement() {
+      if (!confirm("Voulez-vous redistribuer automatiquement et équitablement tous les dossiers pèlerins entre tous les conseillers disponibles ?")) {
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v1/team/repartir', { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+          await loadData();
+          await loadTeam();
+          alert(`⚡ Répartition terminée avec succès !\n\n${data.distribution.map(d => `• ${d.identifiant} (${d.nom}) : ${d.dossiersCount} dossiers`).join('\n')}`);
+        } else {
+          alert("Erreur : " + (data.error || "Échec de la répartition"));
+        }
+      } catch (err) {
+        alert("Erreur réseau : " + err.message);
+      }
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      renderOverviewTable();
+    }
+
+    function handleSearch() {
+      renderOverviewTable();
+    }
+
+    // CLOCKS
+    setInterval(() => {
+      const now = new Date();
+      const p = now.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris' });
+      const m = now.toLocaleTimeString('fr-FR', { timeZone: 'Asia/Riyadh' });
+      const elP = document.getElementById('clockParis');
+      const elM = document.getElementById('clockMecca');
+      if (elP) elP.textContent = p;
+      if (elM) elM.textContent = m;
+    }, 1000);
+
+    function downloadJsonBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allPelerins, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `salam-omra-pelerins-${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    async function triggerImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const content = e.target.result;
+          let payload = file.name.endsWith('.json') ? JSON.parse(content) : { csvContent: content };
+          
+          const res = await fetch('/api/v1/pelerins/import', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          alert(data.message || "Import terminé.");
+          loadData();
+        } catch (err) {
+          alert("Erreur lors de l'import : " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function loadSyncStatus() {
+      try {
+        const res = await fetch('/api/v1/sync/status');
+        if (res.ok) {
+          const state = await res.json();
+          const btn = document.getElementById('labelSyncMonOmra');
+          if (btn && state.lastSyncedAt) {
+            const dateObj = new Date(state.lastSyncedAt);
+            const timeStr = !isNaN(dateObj.getTime()) ? dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+            if (timeStr) {
+              btn.innerHTML = `Synchro Mon Omra <span class="text-[10px] font-normal opacity-80">(${timeStr})</span>`;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    async function triggerMonOmraSync() {
+      const btn = document.getElementById('btnSyncMonOmra');
+      const label = document.getElementById('labelSyncMonOmra');
+      const icon = document.getElementById('iconSyncSpinner');
+      
+      const originalText = label.innerText;
+      label.innerText = 'Synchronisation...';
+      icon.classList.add('animate-spin');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/v1/sync/mon-omra', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`✅ Synchronisation Mon Omra réussie !\n\n• Nouveaux dossiers importés : ${data.importedCount}\n• Dossiers mis à jour : ${data.updatedCount}\n• Total reçus : ${data.totalRecordsReceived}`);
+          await loadData();
+          loadSyncStatus();
+        } else {
+          alert(`⚠️ Échec de la synchronisation Mon Omra :\n${data.error || 'Erreur inconnue'}`);
+        }
+      } catch (err) {
+        alert("Erreur de connexion au serveur : " + err.message);
+      } finally {
+        label.innerText = originalText;
+        icon.classList.remove('animate-spin');
+        btn.disabled = false;
+      }
+    }
+
+    // GESTION DU MENU LATÉRAL RÉTRACTABLE & RESPONSIVE
+    let isSidebarCollapsed = localStorage.getItem('salamomra_sidebar_collapsed') === 'true';
+    let isMobileDrawerOpen = false;
+
+    function initSidebarState() {
+      const isMobile = window.innerWidth < 768;
+      const aside = document.getElementById('mainSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      
+      if (!aside) return;
+
+      if (isMobile) {
+        aside.classList.remove('sidebar-collapsed');
+        if (!isMobileDrawerOpen) {
+          aside.classList.add('-translate-x-full');
+          aside.classList.remove('translate-x-0');
+          if (backdrop) backdrop.classList.add('hidden');
+        } else {
+          aside.classList.remove('-translate-x-full');
+          aside.classList.add('translate-x-0');
+          if (backdrop) backdrop.classList.remove('hidden');
+        }
+      } else {
+        // Mode Desktop Windows / Chromium
+        if (backdrop) backdrop.classList.add('hidden');
+        aside.classList.remove('-translate-x-full', 'translate-x-0');
+        if (isSidebarCollapsed) {
+          aside.classList.add('sidebar-collapsed');
+        } else {
+          aside.classList.remove('sidebar-collapsed');
+        }
+      }
+    }
+
+    function toggleSidebar(forceState) {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        isMobileDrawerOpen = typeof forceState === 'boolean' ? forceState : !isMobileDrawerOpen;
+      } else {
+        isSidebarCollapsed = typeof forceState === 'boolean' ? forceState : !isSidebarCollapsed;
+        localStorage.setItem('salamomra_sidebar_collapsed', isSidebarCollapsed);
+      }
+      initSidebarState();
+    }
+
+    window.addEventListener('resize', () => {
+      initSidebarState();
+    });
+
+    checkAuth();
+    loadData();
+    loadSyncStatus();
+    initSidebarState();
+  </script>
+</body>
+</html>

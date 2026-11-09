@@ -1,0 +1,151 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Assistance Hajj - Centre de Suivi Nusuk",
+    "version": "0.1.0-scaffold",
+    "description": "Contrats d'interface pour le Dashboard (SCR01), l'ingestion d'emails et la gestion des dossiers."
+  },
+  "paths": {
+    "/api/v1/dashboard/summary": {
+      "get": {
+        "summary": "Récupérer les statistiques globales et le statut de préparation pour SCR01",
+        "responses": {
+          "200": {
+            "description": "Statistiques agrégées du tableau de bord",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardStatsDto"
+                }
+              }
+            }
+          },
+          "401": { "description": "Non authentifié" },
+          "403": { "description": "Accès refusé" }
+        }
+      }
+    },
+    "/api/v1/dossiers": {
+      "get": {
+        "summary": "Lister les dossiers à suivre avec filtres (urgents, équipe)",
+        "parameters": [
+          { "name": "filtre", "in": "query", "schema": { "type": "string", "enum": ["TOUS", "URGENTS", "MON_EQUIPE"] } },
+          { "name": "recherche", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des dossiers résumés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/DossierResumeDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/recent": {
+      "get": {
+        "summary": "Derniers événements Nusuk expurgés reçus",
+        "responses": {
+          "200": {
+            "description": "Flux d'événements récents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/EvenementRecentDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{id}/lock": {
+      "post": {
+        "summary": "Verrouiller une tâche pour éviter les collisions entre conseillers (AC16/RB09)",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "200": { "description": "Tâche verrouillée avec succès" },
+          "409": { "description": "Tâche déjà en cours de traitement par un autre conseiller" }
+        }
+      }
+    },
+    "/api/v1/ingestion/webhook": {
+      "post": {
+        "summary": "Réception d'un événement brut de messagerie (Interne/Cloud PubSub/MS Graph)",
+        "description": "Point d'entrée sécurisé pour les notifications. Déclenche le nettoyage OTP synchrone avant stockage.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["provider", "messageId", "timestamp"],
+                "properties": {
+                  "provider": { "type": "string", "enum": ["GMAIL", "OUTLOOK"] },
+                  "messageId": { "type": "string" },
+                  "timestamp": { "type": "string", "format": "date-time" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": { "description": "Événement accepté pour traitement asynchrone" },
+          "401": { "description": "Signature webhook invalide" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DashboardStatsDto": {
+        "type": "object",
+        "properties": {
+          "totalPelerinsInscrits": { "type": "integer", "example": 76 },
+          "totalDossiersPrets": { "type": "integer", "example": 58 },
+          "totalActionsATraiter": { "type": "integer", "example": 12 },
+          "totalDossiersBloques": { "type": "integer", "example": 6 },
+          "progressionVente": {
+            "type": "object",
+            "properties": {
+              "pourcentageComptesValides": { "type": "number", "example": 65 },
+              "pourcentageWalletsPrets": { "type": "number", "example": 55 },
+              "pourcentageChoixApprouves": { "type": "number", "example": 55 }
+            }
+          },
+          "prochaineVenteTexte": { "type": "string", "example": "date officielle à confirmer" }
+        }
+      },
+      "DossierResumeDto": {
+        "type": "object",
+        "properties": {
+          "dossierId": { "type": "string", "format": "uuid" },
+          "pelerinNomComplet": { "type": "string", "example": "Amine B." },
+          "etape": { "type": "string", "example": "Wallet" },
+          "actionAttendue": { "type": "string", "example": "Vérifier le crédit reçu" },
+          "severiteAction": { "type": "string", "enum": ["BASSE", "NORMALE", "URGENTE", "CRITIQUE"] },
+          "conseillerNom": { "type": "string", "example": "Conseiller 1" },
+          "urgent": { "type": "boolean", "example": true }
+        }
+      },
+      "EvenementRecentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "titre": { "type": "string", "example": "Crédit wallet détecté" },
+          "description": { "type": "string", "example": "Montant à contrôler" },
+          "horodatageRelatif": { "type": "string", "example": "Aujourd'hui 10:24" },
+          "actionRequisePar": { "type": "string", "enum": ["CONSEILLER", "COORDINATEUR", "PELERIN"] }
+        }
+      }
+    }
+  }
+}

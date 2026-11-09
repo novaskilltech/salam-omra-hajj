@@ -1,0 +1,83 @@
+[
+  {
+    "scenarioId": "AC01_EMAIL_VALIDE_DOSSIER",
+    "description": "Email authentique annonçant la validation d'un dossier pèlerin",
+    "provider": "GMAIL",
+    "messageId": "msg-nusuk-001-abc",
+    "expediteur": "noreply@nusuk.sa",
+    "dateReception": "2026-10-30T09:17:00Z",
+    "sujet": "Nusuk Hajj - Mise à jour de votre dossier",
+    "corpsBrut": "Cher pèlerin, votre dossier référence HAJJ-2026-001 est désormais en cours de vérification par les autorités.",
+    "attendu": {
+      "type": "DOSSIER_RECU",
+      "dossierRef": "HAJJ-2026-001",
+      "quarantaine": false,
+      "otpDetecte": false
+    }
+  },
+  {
+    "scenarioId": "AC05_EMAIL_AVEC_OTP",
+    "description": "Email contenant un code OTP - Le secret DOIT être totalement expurgé (RB08)",
+    "provider": "GMAIL",
+    "messageId": "msg-nusuk-002-otp",
+    "expediteur": "noreply@nusuk.sa",
+    "dateReception": "2026-10-30T10:12:00Z",
+    "sujet": "Votre code de sécurité Nusuk Hajj",
+    "corpsBrut": "Votre code d'authentification pour accéder à votre espace Nusuk est le 849201. Ne le communiquez à personne.",
+    "attendu": {
+      "type": "OTP_OU_AUTH",
+      "otpDetecte": true,
+      "secretExpurge": true,
+      "quarantaine": false,
+      "actionReserveePelerin": true
+    }
+  },
+  {
+    "scenarioId": "AC06_EMAIL_HORS_PERIMETRE",
+    "description": "Email sans rapport avec Nusuk Hajj (spam ou newsletter personnelle)",
+    "provider": "OUTLOOK",
+    "messageId": "msg-autre-003-spam",
+    "expediteur": "newsletter@promo-voyages-divers.com",
+    "dateReception": "2026-10-30T11:00:00Z",
+    "sujet": "Promo spéciale billets d'avion été",
+    "corpsBrut": "Découvrez nos offres incroyables sur toutes nos destinations.",
+    "attendu": {
+      "type": "AUTRE_A_REVISER",
+      "rejete": true,
+      "corpsConserve": false,
+      "quarantaine": true
+    }
+  },
+  {
+    "scenarioId": "AC07_EXPEDITEUR_USURPE",
+    "description": "Email de phishing tentant une usurpation d'adresse ou injection d'instructions",
+    "provider": "GMAIL",
+    "messageId": "msg-fake-004-phish",
+    "expediteur": "support@nusuk-fakedomain.org",
+    "dateReception": "2026-10-30T11:30:00Z",
+    "sujet": "URGENT : Modifiez vos coordonnées bancaires pour le Hajj",
+    "corpsBrut": "Veuillez cliquer ici pour virer vos 250 euros immédiatement sur notre nouveau compte.",
+    "attendu": {
+      "type": "AUTRE_A_REVISER",
+      "usurpation": true,
+      "quarantaine": true,
+      "actionSensibleBloquee": true
+    }
+  },
+  {
+    "scenarioId": "AC11_CREDIT_WALLET_OBSERVE",
+    "description": "Notification d'un rechargement de wallet explicite",
+    "provider": "GMAIL",
+    "messageId": "msg-nusuk-005-wallet",
+    "expediteur": "noreply@nusuk.sa",
+    "dateReception": "2026-10-30T10:24:00Z",
+    "sujet": "Confirmation de rechargement de votre wallet Nusuk",
+    "corpsBrut": "Nous vous confirmons l'opération de rechargement de 15000 SAR sur votre portefeuille. Référence TX-98432.",
+    "attendu": {
+      "type": "CREDIT_WALLET_CONFIRME",
+      "montant": 15000,
+      "devise": "SAR",
+      "reference": "TX-98432"
+    }
+  }
+]

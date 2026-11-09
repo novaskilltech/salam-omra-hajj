@@ -1,0 +1,12 @@
+[
+  {
+    "id": "team-01",
+    "identifiant": "Conseiller 1",
+    "nom": "Farem Voyage",
+    "prenom": "Équipe Salam Omra",
+    "email": "faremvoyage@outlook.fr",
+    "telephone": "+33669719933",
+    "actif": true,
+    "dossiersCount": 0
+  }
+]
