@@ -1,5 +1,5 @@
 # Dossier de Release Readiness - Assistance Hajj Nusuk (Lot 1)
-**Commanditaire** : La Conciergerie Omrayanair / Salah Eddine Lamkhannet  
+**Commanditaire** : La Agence salamomra / Salah Eddine Lamkhannet  
 **Version** : v0.1.0-RC1  
 **Gate B - Release Readiness**  
 
@@ -34,8 +34,8 @@
   - Alerter sur métrique d'erreurs 5xx et latence de traitement webhook > 60s (AC18).
 
 ### LEGAL (Droit du Produit & Prestation) : 🟢 OK-with-risks
-- **Motif** : Découplage strict entre les 250 € d'honoraires de conciergerie et les fonds du pèlerinage Hajj (RB11). Pas de promesse illégale de place ou de visa garanti (RB13).
-- **Risque résiduel** : Les CGV de la conciergerie doivent explicitement mentionner l'obligation de moyens (et non de résultat) concernant l'obtention d'un pack lors des ouvertures de vente Nusuk.
+- **Motif** : Découplage strict entre les 250 € d'honoraires de Agence et les fonds du pèlerinage Hajj (RB11). Pas de promesse illégale de place ou de visa garanti (RB13).
+- **Risque résiduel** : Les CGV de la Agence doivent explicitement mentionner l'obligation de moyens (et non de résultat) concernant l'obtention d'un pack lors des ouvertures de vente Nusuk.
 - **Actions** :
   - Faire valider le texte des CGV/CGU affiché aux pèlerins avant encaissement des premiers 250 €.
 
@@ -52,7 +52,7 @@
 PORT=3002
 NODE_ENV=production
 APP_SECRET_KEY=***
-GCP_PUB_SUB_TOPIC=projects/omrayanair-hajj/topics/gmail-notifications
+GCP_PUB_SUB_TOPIC=projects/salamomra-hajj/topics/gmail-notifications
 ```
 
 ### B. Plan de Rollback Immédiat

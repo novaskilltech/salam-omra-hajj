@@ -1,5 +1,5 @@
 /**
- * TEST AUTOMATISÉ : Synchronisation différentielle Mon Omra -> Omrayanair Hajj
+ * TEST AUTOMATISÉ : Synchronisation différentielle Mon Omra -> salamomra Hajj
  */
 
 const http = require('http');

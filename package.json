@@ -1,7 +1,7 @@
 {
   "name": "salam-omra-hajj",
   "version": "0.1.0",
-  "description": "Plateforme d'Assistance & Conciergerie Hajj Nusuk 2026 - Salam Omra by Farem Voyage LLC",
+  "description": "Plateforme d'Assistance & Gestion Hajj Nusuk 2026 - Salam Omra by FAREM Voyage LLC - Éditée par NovaSkill Tech",
   "main": "src/server.js",
   "engines": {
     "node": "22.x"
@@ -17,7 +17,7 @@
     "farem-voyage",
     "suivi"
   ],
-  "author": "NOVA SQUAD",
+  "author": "NovaSkill Tech",
   "license": "UNLICENSED",
   "private": true
 }

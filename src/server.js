@@ -21,7 +21,7 @@ const appointmentsPath = path.join(__dirname, '..', 'data', 'appointments.json')
 const stripeConfigPath = path.join(__dirname, '..', 'data', 'stripe-config.json');
 const paymentsLedgerPath = path.join(__dirname, '..', 'data', 'payments-ledger.json');
 
-// Mot de passe et secrets de la conciergerie
+// Mot de passe et secrets de la agence
 const CONCIERGERIE_PASSWORD = process.env.CONCIERGERIE_PASSWORD || 'salamomra2026';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'salam-omra-hajj-secure-session-salt-2026';
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || process.env.MON_OMRA_HAJJ_API_KEY || 'hajj_live_e4d73d355d4941c999aad7eaca099c8a756616c080744f998ccf4738553dd66f';
@@ -69,9 +69,9 @@ function getAuthenticatedSession(req) {
     return { role: 'API_ADMIN', sub: 'api_key' };
   }
 
-  // 2. Cookie conciergerie_auth
+  // 2. Cookie agence_auth
   const cookieHeader = req.headers['cookie'] || '';
-  const match = cookieHeader.match(/conciergerie_auth=([^;]+)/);
+  const match = cookieHeader.match(/agence_auth=([^;]+)/);
   if (match) {
     const session = verifySessionToken(match[1]);
     if (session) return session;
@@ -106,11 +106,11 @@ function clearLoginFailures(ip) {
 let pelerinsData = [];
 let appointmentsData = [];
 let stripeConfig = {
-  productName: "Assistance & Conciergerie Hajj Nusuk 2026",
+  productName: "Assistance & Agence Hajj Nusuk 2026",
   unitAmountEur: 390.0,
   currency: "EUR",
   billingType: "one_time",
-  statementDescriptor: "SALAM OMRA HAJJ",
+  statementDescriptor: "FAREM SALAM OMRA",
   paymentLinkUrl: "",
   description: "Accompagnement administratif & technique pour l'inscription Nusuk Hajj 2026 : audit passeports, préparation wallet, conseil forfaits et veille live.",
   isLive: false
@@ -347,7 +347,7 @@ const taskLocks = new Map();
 // Mémoire des messages dédupliqués (AC02)
 const processedMessageIds = new Set();
 
-// Gestion de l'équipe de conciergerie (persistance dans data/team-members.json)
+// Gestion de l'équipe de agence (persistance dans data/team-members.json)
 const teamMembersPath = path.join(__dirname, '..', 'data', 'team-members.json');
 let teamMembers = [];
 
@@ -362,7 +362,7 @@ function loadTeamMembers() {
           identifiant: "Conseiller 1",
           nom: "Salah Lamkhannet",
           prenom: "Salah",
-          role: "Coordinateur Principal & Concierge",
+          role: "Responsable Agence & Accompagnement Hajj",
           email: "faremvoyage@outlook.fr",
           telephone: "+33612345678",
           statut: "DISPONIBLE",
@@ -503,7 +503,7 @@ function handleRequest(req, res) {
   }
 
   // --- ROUTES API REST ---
-  // Authentification de la conciergerie avec protection anti-bruteforce et jeton HMAC
+  // Authentification de la agence avec protection anti-bruteforce et jeton HMAC
   if (pathname === '/api/v1/auth/login' && method === 'POST') {
     const clientIp = (req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : (req.socket && req.socket.remoteAddress)) || '127.0.0.1';
 
@@ -529,20 +529,20 @@ function handleRequest(req, res) {
           // Génération du jeton cryptographique HMAC-SHA256
           const sessionToken = signSessionToken({
             role: 'CONCIERGE_ADMIN',
-            sub: 'conciergerie',
+            sub: 'agence',
             iat: Date.now(),
             exp: Date.now() + 86400 * 1000 // 24h
           });
 
           res.writeHead(200, {
             'Content-Type': 'application/json; charset=utf-8',
-            'Set-Cookie': `conciergerie_auth=${sessionToken}; Path=/; HttpOnly; Max-Age=86400; SameSite=Lax`
+            'Set-Cookie': `agence_auth=${sessionToken}; Path=/; HttpOnly; Max-Age=86400; SameSite=Lax`
           });
           res.end(JSON.stringify({ success: true, message: "Authentification réussie." }));
         } else {
           registerLoginFailure(clientIp);
           res.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8' });
-          res.end(JSON.stringify({ error: "Mot de passe de la conciergerie incorrect." }));
+          res.end(JSON.stringify({ error: "Mot de passe de la agence incorrect." }));
         }
       } catch (e) {
         res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -567,7 +567,7 @@ function handleRequest(req, res) {
   if (pathname === '/api/v1/auth/logout' && method === 'POST') {
     res.writeHead(200, {
       'Content-Type': 'application/json; charset=utf-8',
-      'Set-Cookie': 'conciergerie_auth=; Path=/; HttpOnly; Max-Age=0'
+      'Set-Cookie': 'agence_auth=; Path=/; HttpOnly; Max-Age=0'
     });
     res.end(JSON.stringify({ success: true, message: "Déconnecté." }));
     return;
@@ -593,7 +593,7 @@ function handleRequest(req, res) {
     if (!session) {
       res.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ 
-        error: "Accès refusé. Authentification requise pour accéder aux dossiers et fonctions de conciergerie.",
+        error: "Accès refusé. Authentification requise pour accéder aux dossiers et fonctions de agence.",
         code: "UNAUTHORIZED"
       }));
       return;
@@ -876,7 +876,7 @@ function handleRequest(req, res) {
           "Numéro de téléphone mobile",
           "Adresse de facturation (TVA B2C)"
         ],
-        mentionsLegales: "Honoraires de conciergerie et d'assistance administrative & technique. La prestation ne comprend pas l'achat du pack de voyage sur le portail officiel saoudien Nusuk."
+        mentionsLegales: "Honoraires de agence et d'assistance administrative & technique. La prestation ne comprend pas l'achat du pack de voyage sur le portail officiel saoudien Nusuk."
       }
     }));
     return;
@@ -1699,7 +1699,7 @@ function handleRequest(req, res) {
   let targetFile = pathname.slice(1);
   if (pathname === '/' || pathname === '/accueil') {
     targetFile = 'index.html';
-  } else if (pathname === '/dashboard' || pathname === '/conciergerie') {
+  } else if (pathname === '/dashboard' || pathname === '/agence') {
     targetFile = 'dashboard.html';
   } else if (pathname === '/register' || pathname === '/inscription') {
     targetFile = 'register.html';

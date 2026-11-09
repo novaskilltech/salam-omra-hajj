@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Salam Omra - Assistance Hajj | Tableau de bord</title>
+  <title>Salam Omra - Agence FAREM Voyage | Tableau de bord</title>
 
   <!-- Favicon & Icônes Navigateur -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -14,15 +14,15 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://salam-omra-hajj.vercel.app/dashboard">
-  <meta property="og:title" content="Tableau de bord • Salam Omra Assistance Hajj">
-  <meta property="og:description" content="Plateforme de conciergerie et de suivi opérationnel des inscriptions Nusuk Hajj 2026.">
+  <meta property="og:title" content="Tableau de bord • Salam Omra (Agence FAREM Voyage)">
+  <meta property="og:description" content="Plateforme de suivi opérationnel des inscriptions Nusuk Hajj 2026 - Agence FAREM Voyage.">
   <meta property="og:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
   <meta property="og:image:secure_url" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Salam Omra Assistance Hajj">
-  <meta name="twitter:description" content="Tableau de bord de suivi et conciergerie Hajj Nusuk.">
+  <meta name="twitter:description" content="Tableau de bord de suivi opérationnel Hajj Nusuk - Agence FAREM Voyage.">
   <meta name="twitter:image" content="https://salam-omra-hajj.vercel.app/assets/og-image.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,7 +112,7 @@
           <path d="M4 19h16M7 22h10"/>
         </svg>
       </div>
-      <h2 class="text-xl font-bold text-white">Espace Conciergerie Sécurisé</h2>
+      <h2 class="text-xl font-bold text-white">Espace Agence Sécurisé</h2>
       <p class="text-xs text-slate-400 mt-1 mb-6">Veuillez renseigner votre mot de passe d'accès pour consulter et gérer les dossiers pèlerins.</p>
 
       <div id="authError" class="hidden mb-4 p-3 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-semibold">
@@ -120,7 +120,7 @@
       </div>
 
       <form onsubmit="unlockDashboard(event)" class="space-y-4">
-        <input type="password" id="gatePassword" required placeholder="Mot de passe conciergerie..."
+        <input type="password" id="gatePassword" required placeholder="Mot de passe agence..."
                class="w-full px-4 py-3 rounded-xl bg-[#06161d] border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500">
         
         <button type="submit" id="unlockBtn" class="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition shadow-lg">
@@ -147,7 +147,7 @@
           <img src="/assets/logo-salam-omra.jpg" alt="Logo Salam Omra" class="w-10 h-10 rounded-full object-cover shrink-0 border border-emerald-400/50 shadow-sm">
           <div class="sidebar-header-text min-w-0">
             <h1 class="text-base font-bold tracking-wider text-white truncate leading-tight">SALAM OMRA</h1>
-            <p class="text-[11px] text-emerald-300 font-medium tracking-wide truncate">by FAREM VOYAGE LLC</p>
+            <p class="text-[11px] text-emerald-300 font-medium tracking-wide truncate">Agence FAREM Voyage</p>
           </div>
         </div>
 
@@ -220,6 +220,7 @@
         <span class="sidebar-footer-text truncate">Verrouiller / Quitter</span>
       </button>
       <p class="sidebar-footer-text text-[10px] text-slate-400 text-center italic truncate">Accompagner vos pèlerins vers un Hajj serein</p>
+      <p class="sidebar-footer-text text-[9px] text-slate-500 text-center tracking-tight">© 2026 NovaSkill Tech • Tous droits réservés</p>
     </div>
   </aside>
 
@@ -236,7 +237,7 @@
 
         <div class="min-w-0">
           <h2 id="pageTitle" class="text-base sm:text-xl font-bold text-slate-900 tracking-tight truncate leading-tight">Tableau de bord</h2>
-          <p id="pageSubtitle" class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate hidden sm:block">Données réelles du fichier JSON des pèlerins Salam Omra</p>
+          <p id="pageSubtitle" class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate hidden sm:block">Données réelles du fichier JSON des pèlerins FAREM Voyage (Salam Omra)</p>
         </div>
       </div>
 
@@ -700,7 +701,7 @@
             <div>
               <div class="flex items-center gap-2">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
-                  Conciergerie Salam Omra
+                  Agence FAREM Voyage (Salam Omra)
                 </span>
                 <span id="teamBadgeCount" class="text-xs text-slate-500 font-semibold">2 membres actifs</span>
               </div>
@@ -729,7 +730,7 @@
           <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
               <div>
-                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Effectif Conciergerie</span>
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Effectif de l'Agence</span>
                 <span id="statTeamTotal" class="text-lg font-extrabold text-slate-900">0 conseillers</span>
               </div>
               <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-sm">👥</div>
@@ -940,7 +941,7 @@
               <h3 class="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100">Sécurité & Système</h3>
 
               <div>
-                <label class="block font-bold text-slate-700 mb-1">Mot de passe Conciergerie</label>
+                <label class="block font-bold text-slate-700 mb-1">Mot de passe Espace Agence</label>
                 <input type="password" value="salamomra2026" disabled
                        class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-mono">
                 <p class="text-[10px] text-slate-400 mt-1">Configurable via variable d'environnement <code>CONCIERGERIE_PASSWORD</code>.</p>
@@ -951,7 +952,7 @@
                   Exporter la base de données (JSON)
                 </button>
                 <button onclick="logout()" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-700 font-bold hover:bg-rose-100 border border-rose-200 transition">
-                  Se déconnecter de la conciergerie
+                  Se déconnecter de l'espace agence
                 </button>
               </div>
             </div>
@@ -1356,7 +1357,7 @@
     let allAppointments = [];
     let allTeamMembers = [];
     let stripeGlobalConfig = {
-      productName: "Assistance & Conciergerie Hajj Nusuk 2026",
+      productName: "Assistance & Accompagnement Hajj Nusuk 2026 - FAREM Voyage (Salam Omra)",
       unitAmountEur: 390.0,
       paymentLinkUrl: "",
       preferentialPaymentLinkUrl: ""
@@ -1421,15 +1422,15 @@
 
       const tabs = ['overview', 'pelerins', 'agenda', 'messages', 'wallets', 'packs', 'calendar', 'team', 'settings'];
       const titles = {
-        'overview': { title: 'Tableau de bord', sub: 'Données réelles du fichier JSON des pèlerins Salam Omra' },
+        'overview': { title: 'Tableau de bord', sub: 'Données réelles du fichier JSON des pèlerins FAREM Voyage (Salam Omra)' },
         'pelerins': { title: 'Annuaire des Pèlerins', sub: 'Actions WhatsApp, Email et mise à jour de statut' },
         'agenda': { title: 'Agenda RDV Téléphoniques', sub: 'Planification des appels et suivi des créneaux' },
         'messages': { title: 'Messages Nusuk', sub: 'Boîte de réception sécurisée et expurgée de secrets' },
         'wallets': { title: 'Suivi des Wallets', sub: 'Statuts des portefeuilles officiels en Riyal Saoudien' },
         'packs': { title: 'Choix des Packs', sub: 'Arbitrage des formules Yusr Al Mashaer' },
         'calendar': { title: 'Calendrier des Ventes', sub: 'Veille horaire Paris / Riyad pour les ouvertures' },
-        'team': { title: 'Équipe Conciergerie', sub: 'Répartition des dossiers et statut des conseillers' },
-        'settings': { title: 'Paramètres', sub: 'Configuration de la conciergerie et exports' }
+        'team': { title: 'Équipe de l\'Agence', sub: 'Répartition des dossiers et conseillers FAREM Voyage' },
+        'settings': { title: 'Paramètres & Tarifs Agence', sub: 'Configuration des tarifs Stripe, de l\'équipe et exports' }
       };
 
       tabs.forEach(t => {
@@ -1678,7 +1679,7 @@
 
 J'espère que vous vous portez bien ainsi que vos proches.
 
-C'est ${advisorName} de l'équipe Salam Omra. Je fais suite à votre démarche d'inscription pour le Hajj 2026.
+C'est ${advisorName} de l'agence FAREM Voyage (Salam Omra). Je fais suite à votre démarche d'inscription pour le Hajj 2026.
 
 Afin de vous accompagner pas à pas et sans stress sur la plateforme officielle Nusuk, nous proposons plusieurs formules adaptées à vos besoins :
 
@@ -1750,7 +1751,7 @@ Qu'Allah agrée votre démarche et vous accorde un Hajj béni.
 Bien fraternellement,
 
 ${advisorName}
-Conseiller Conciergerie Hajj — Salam Omra`;
+Conseiller Agence — FAREM Voyage (Salam Omra)`;
 
       return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
@@ -2298,7 +2299,7 @@ Conseiller Conciergerie Hajj — Salam Omra`;
 
       const msg = `Salam aleykoum ${fullName},
 
-C'est ${advisorName} de l'équipe Salam Omra.
+C'est ${advisorName} de l'agence FAREM Voyage (Salam Omra).
 
 Suite à notre échange concernant votre accompagnement pour le Hajj 2026, voici le lien officiel sécurisé pour votre démarche :
 
@@ -2707,7 +2708,7 @@ ${advisorName} — Salam Omra Assistance Hajj`;
                   <div>
                     <span class="inline-block px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] font-bold text-slate-700 mb-0.5">${m.identifiant}</span>
                     <h4 class="font-bold text-sm text-slate-900 leading-snug">${m.nom}</h4>
-                    <p class="text-xs text-slate-500">${m.role || 'Conseiller Conciergerie'}</p>
+                    <p class="text-xs text-slate-500">${m.role || 'Conseiller Agence'}</p>
                   </div>
                 </div>
                 ${statusBadge}

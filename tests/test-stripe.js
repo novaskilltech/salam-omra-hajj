@@ -93,7 +93,7 @@ async function runStripeTests() {
   console.log("✓ TEST 4: Endpoint POST /api/v1/webhooks/stripe checkout.session.completed validé");
 
   // 5. Inscription avec lien Stripe retourné
-  const testEmail = `client-stripe-${Date.now()}@omrayanair.com`;
+  const testEmail = `client-stripe-${Date.now()}@salamomra.com`;
   const regRes = await request({
     hostname: 'localhost',
     port: 3002,
